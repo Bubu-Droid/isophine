@@ -23,20 +23,23 @@ private slots:
   void on_actionQuit_triggered();
 
   void on_actionToggleInspector_triggered(bool checked);
+  void on_actionToggleThumbnail_triggered(bool checked);
 
   void on_xOffsetDoubleSpinBox_editingFinished();
-
+  void on_xOffsetDoubleSpinBox_valueChanged(double arg1);
   void on_yOffsetDoubleSpinBox_editingFinished();
-
+  void on_yOffsetDoubleSpinBox_valueChanged(double arg1);
   void on_scaleDoubleSpinBox_editingFinished();
-
+  void on_scaleDoubleSpinBox_valueChanged(double arg1);
   void on_rotationDoubleSpinBox_editingFinished();
+  void on_rotationDoubleSpinBox_valueChanged(double arg1);
 
   void on_actionZoom_In_triggered();
-
   void on_actionZoom_Out_triggered();
 
-  void on_actionToggleThumbnail_triggered(bool checked);
+  void on_thumbnailView_activated(const QModelIndex& index);
+
+  void on_pageViewWidget_pageTransformChangedByKey();
 
 private:
   Ui::IsophineEditor* ui;
