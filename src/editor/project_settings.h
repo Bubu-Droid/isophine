@@ -1,7 +1,5 @@
 #pragma once
 
-#include <qpalette.h>
-
 #include <QPalette>
 #include <QPdfDocument>
 #include <QString>
