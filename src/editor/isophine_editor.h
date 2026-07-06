@@ -19,7 +19,6 @@ public:
 
 private slots:
 
-  // TODO: remove this and add a normal connect instead (to main.cpp)
   void on_actionQuit_triggered();
 
   void on_actionToggleInspector_triggered(bool checked);
@@ -39,7 +38,12 @@ private slots:
 
   void on_thumbnailView_activated(const QModelIndex& index);
 
-  void on_pageViewWidget_pageTransformChangedByKey();
+  void on_pageViewWidget_pageTransformChanged();
+
+  void on_pageViewWidget_xOffsetChangedByKey();
+  void on_pageViewWidget_yOffsetChangedByKey();
+  void on_pageViewWidget_scaleChangedByKey();
+  void on_pageViewWidget_rotationChangedByKey();
 
 private:
   Ui::IsophineEditor* ui;

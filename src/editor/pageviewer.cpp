@@ -1,16 +1,10 @@
-#define KEY_EVENT_RETURN \
-  update(); \
-  emit pageTransformChangedByKey(); \
-  return
-// TODO: too lazy to fix this rn, will fix later
-// also, update + return = upturn :) gonna use this
-
 #include "pageviewer.h"
 
 #include <QGuiApplication>
 #include <QPainter>
 #include <QPainterStateGuard>
 #include <QPen>
+#include <cmath>
 
 #include "project_settings.h"
 
@@ -56,6 +50,8 @@ void PageViewer::keyPressEvent(QKeyEvent* event) {
   int& currentPageNo = ProjectSettings::instance().currentPageNo;
   std::vector<PageTransform>& pageTransformVector =
       ProjectSettings::instance().pageTransformVector;
+  PageTransform& currentPageTransform =
+      ProjectSettings::instance().pageTransformVector[currentPageNo];
 
   qreal& moveSmallAmount = ProjectSettings::instance().moveSmallAmount;
   qreal& moveLargeAmount = ProjectSettings::instance().moveLargeAmount;
@@ -98,16 +94,15 @@ void PageViewer::keyPressEvent(QKeyEvent* event) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
     // I know, I know, I'm probably violating the DRY principle.
     // How do I make this nicer, suggestions?
-    // I hate switch cases, btw. Maybe I can use templates.
+    // I hate switch cases, btw. Maybe I can use templates or
+    // maybe write a throwaway function.
     // Well, I'm too lazy to fix this rn, will fix this sometime later.
-    // TODO: handle the edge cases where i'm trying to go more left than what the sliderbox is bounded by
-    // fix the same for scaling
     if (keyEvent->key() == nextKey) {
       if (currentPageNo < m_pageCount - 1) {
         currentPageNo++;
         loadPage();
         update();
-        emit pageTransformChangedByKey();
+        emit pageTransformChanged();
       }
       return;
     } else if (keyEvent->key() == prevKey) {
@@ -115,58 +110,129 @@ void PageViewer::keyPressEvent(QKeyEvent* event) {
         currentPageNo--;
         loadPage();
         update();
-        emit pageTransformChangedByKey();
+        emit pageTransformChanged();
       }
       return;
     } else if (keyEvent->text() == leftSmallKey) {
-      pageTransformVector[currentPageNo].xOffset -= moveSmallAmount;
-      KEY_EVENT_RETURN;
+      if (currentPageTransform.xOffset - moveSmallAmount >= -MAX_OFFSET_MAG) {
+        currentPageTransform.xOffset -= moveSmallAmount;
+      }
+      update();
+      emit xOffsetChangedByKey();
+      return;
     } else if (keyEvent->text() == leftLargeKey) {
-      pageTransformVector[currentPageNo].xOffset -= moveLargeAmount;
-      KEY_EVENT_RETURN;
+      if (currentPageTransform.xOffset - moveLargeAmount >= -MAX_OFFSET_MAG) {
+        currentPageTransform.xOffset -= moveLargeAmount;
+      }
+      update();
+      emit xOffsetChangedByKey();
+      return;
     } else if (keyEvent->text() == downSmallKey) {
-      pageTransformVector[currentPageNo].yOffset += moveSmallAmount;
-      KEY_EVENT_RETURN;
+      if (currentPageTransform.yOffset + moveSmallAmount <= MAX_OFFSET_MAG) {
+        currentPageTransform.yOffset += moveSmallAmount;
+      }
+      update();
+      emit yOffsetChangedByKey();
+      return;
     } else if (keyEvent->text() == downLargeKey) {
-      pageTransformVector[currentPageNo].yOffset += moveLargeAmount;
-      KEY_EVENT_RETURN;
+      if (currentPageTransform.yOffset + moveLargeAmount <= MAX_OFFSET_MAG) {
+        currentPageTransform.yOffset += moveLargeAmount;
+      }
+      update();
+      emit yOffsetChangedByKey();
+      return;
     } else if (keyEvent->text() == upSmallKey) {
-      pageTransformVector[currentPageNo].yOffset -= moveSmallAmount;
-      KEY_EVENT_RETURN;
+      if (currentPageTransform.yOffset - moveSmallAmount >= -MAX_OFFSET_MAG) {
+        currentPageTransform.yOffset -= moveSmallAmount;
+      }
+      update();
+      emit yOffsetChangedByKey();
+      return;
     } else if (keyEvent->text() == upLargeKey) {
-      pageTransformVector[currentPageNo].yOffset -= moveLargeAmount;
-      KEY_EVENT_RETURN;
+      if (currentPageTransform.yOffset - moveLargeAmount >= -MAX_OFFSET_MAG) {
+        currentPageTransform.yOffset -= moveLargeAmount;
+      }
+      update();
+      emit yOffsetChangedByKey();
+      return;
     } else if (keyEvent->text() == rightSmallKey) {
-      pageTransformVector[currentPageNo].xOffset += moveSmallAmount;
-      KEY_EVENT_RETURN;
+      if (currentPageTransform.xOffset + moveSmallAmount <= MAX_OFFSET_MAG) {
+        currentPageTransform.xOffset += moveSmallAmount;
+      }
+      update();
+      emit xOffsetChangedByKey();
+      return;
     } else if (keyEvent->text() == rightLargeKey) {
-      pageTransformVector[currentPageNo].xOffset += moveLargeAmount;
-      KEY_EVENT_RETURN;
+      if (currentPageTransform.xOffset + moveLargeAmount <= MAX_OFFSET_MAG) {
+        currentPageTransform.xOffset += moveLargeAmount;
+      }
+      update();
+      emit xOffsetChangedByKey();
+      return;
     } else if (keyEvent->text() == rotateClockSmallKey) {
-      // TODO: use mod 360 to simplify this
-      pageTransformVector[currentPageNo].rotationAmount += rotateSmallAmount;
-      KEY_EVENT_RETURN;
+      currentPageTransform.rotationAmount = std::fmod(
+          currentPageTransform.rotationAmount + rotateSmallAmount,
+          360.0f
+      );
+      update();
+      emit rotationChangedByKey();
+      return;
     } else if (keyEvent->text() == rotateClockLargeKey) {
-      pageTransformVector[currentPageNo].rotationAmount += rotateLargeAmount;
-      KEY_EVENT_RETURN;
+      currentPageTransform.rotationAmount = std::fmod(
+          currentPageTransform.rotationAmount + rotateLargeAmount,
+          360.0f
+      );
+      update();
+      emit rotationChangedByKey();
+      return;
     } else if (keyEvent->text() == rotateAntiClockSmallKey) {
-      pageTransformVector[currentPageNo].rotationAmount -= rotateSmallAmount;
-      KEY_EVENT_RETURN;
+      currentPageTransform.rotationAmount = std::fmod(
+          currentPageTransform.rotationAmount - rotateSmallAmount,
+          360.0f
+      );
+      update();
+      emit rotationChangedByKey();
+      return;
     } else if (keyEvent->text() == rotateAntiClockLargeKey) {
-      pageTransformVector[currentPageNo].rotationAmount -= rotateLargeAmount;
-      KEY_EVENT_RETURN;
+      currentPageTransform.rotationAmount = std::fmod(
+          currentPageTransform.rotationAmount - rotateLargeAmount,
+          360.0f
+      );
+      update();
+      emit rotationChangedByKey();
+      return;
     } else if (keyEvent->key() == scalePageUpSmallKey) {
-      pageTransformVector[currentPageNo].scaleAmount += scalePageSmallAmount;
-      KEY_EVENT_RETURN;
+      if (currentPageTransform.scaleAmount + scalePageSmallAmount
+          <= MAX_SCALE) {
+        currentPageTransform.scaleAmount += scalePageSmallAmount;
+      }
+      update();
+      emit scaleChangedByKey();
+      return;
     } else if (keyEvent->key() == scalePageUpLargeKey) {
-      pageTransformVector[currentPageNo].scaleAmount += scalePageLargeAmount;
-      KEY_EVENT_RETURN;
+      if (currentPageTransform.scaleAmount + scalePageLargeAmount
+          <= MAX_SCALE) {
+        currentPageTransform.scaleAmount += scalePageLargeAmount;
+      }
+      update();
+      emit scaleChangedByKey();
+      return;
     } else if (keyEvent->key() == scalePageDownSmallKey) {
-      pageTransformVector[currentPageNo].scaleAmount -= scalePageSmallAmount;
-      KEY_EVENT_RETURN;
+      if (currentPageTransform.scaleAmount - scalePageSmallAmount
+          >= MIN_SCALE) {
+        currentPageTransform.scaleAmount -= scalePageSmallAmount;
+      }
+      update();
+      emit scaleChangedByKey();
+      return;
     } else if (keyEvent->key() == scalePageDownLargeKey) {
-      pageTransformVector[currentPageNo].scaleAmount -= scalePageLargeAmount;
-      KEY_EVENT_RETURN;
+      if (currentPageTransform.scaleAmount - scalePageLargeAmount
+          >= MIN_SCALE) {
+        currentPageTransform.scaleAmount -= scalePageLargeAmount;
+      }
+      update();
+      emit scaleChangedByKey();
+      return;
     }
   }
 

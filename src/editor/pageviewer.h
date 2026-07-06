@@ -1,7 +1,6 @@
 #pragma once
 
 #include <QKeyEvent>
-#include <QObject>
 #include <QPaintEvent>
 #include <QPixmap>
 #include <QWidget>
@@ -14,7 +13,12 @@ public:
   void loadPage();
 
 signals:
-  void pageTransformChangedByKey();
+  void pageTransformChanged();
+
+  void xOffsetChangedByKey();
+  void yOffsetChangedByKey();
+  void scaleChangedByKey();
+  void rotationChangedByKey();
 
 protected:
   void paintEvent(QPaintEvent* event) override;

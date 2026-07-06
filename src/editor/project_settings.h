@@ -4,6 +4,14 @@
 #include <QString>
 #include <vector>
 
+inline constexpr qreal MAX_OFFSET_MAG = 500;
+// this is for the page
+inline constexpr qreal MIN_SCALE = 0.1;
+inline constexpr qreal MAX_SCALE = 5;
+// this is for the canvas
+inline constexpr qreal MIN_ZOOM = 0.25;
+inline constexpr qreal MAX_ZOOM = 5;
+
 struct PageTransform {
   qreal xOffset = 0;
   qreal yOffset = 0;
@@ -32,8 +40,6 @@ public:
   int boundBoxHorLinesCount = 5;
   int boundBoxVerLinesCount = 3;
   int currentPageNo = 0;
-  // TODO:
-  // the value is allowed to go to a negative value, fix this
   qreal zoomCanvasAmount = 0.25;
 
   qreal moveSmallAmount = 1.0;

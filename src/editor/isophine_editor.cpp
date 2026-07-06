@@ -19,7 +19,6 @@ IsophineEditor::~IsophineEditor() {
 
 void IsophineEditor::on_actionQuit_triggered() {
   close();
-  // TODO: use QKeySequence::quit instead
 }
 
 void IsophineEditor::on_actionToggleInspector_triggered(bool checked) {
@@ -28,8 +27,7 @@ void IsophineEditor::on_actionToggleInspector_triggered(bool checked) {
 
 void IsophineEditor::on_actionToggleThumbnail_triggered(bool checked) {
   ui->thumbnailViewDockWidget->setVisible(checked);
-  // TODO:
-  // gotta add dialog messages on failures here later on
+  // TODO: add dialog messages on failures here later on
   // add a signal and show a message to the statusbar
 }
 
@@ -96,44 +94,68 @@ void IsophineEditor::on_rotationDoubleSpinBox_valueChanged(double arg1) {
 }
 
 void IsophineEditor::on_actionZoom_In_triggered() {
-  ProjectSettings::instance().boundBoxScale +=
-      ProjectSettings::instance().zoomCanvasAmount;
+  if (ProjectSettings::instance().boundBoxScale
+          + ProjectSettings::instance().zoomCanvasAmount
+      <= MAX_ZOOM) {
+    ProjectSettings::instance().boundBoxScale +=
+        ProjectSettings::instance().zoomCanvasAmount;
+  }
   update();
 }
 
 void IsophineEditor::on_actionZoom_Out_triggered() {
-  ProjectSettings::instance().boundBoxScale -=
-      ProjectSettings::instance().zoomCanvasAmount;
+  if (ProjectSettings::instance().boundBoxScale
+          - ProjectSettings::instance().zoomCanvasAmount
+      >= MIN_ZOOM) {
+    ProjectSettings::instance().boundBoxScale -=
+        ProjectSettings::instance().zoomCanvasAmount;
+  }
   update();
 }
 
-void IsophineEditor::on_pageViewWidget_pageTransformChangedByKey() {
+void IsophineEditor::on_pageViewWidget_xOffsetChangedByKey() {
   std::vector<PageTransform>& pageTransformVector =
       ProjectSettings::instance().pageTransformVector;
   int& currentPageNo = ProjectSettings::instance().currentPageNo;
 
-  if (ui->xOffsetDoubleSpinBox->value()
-      != pageTransformVector[currentPageNo].xOffset) {
-    ui->xOffsetDoubleSpinBox->setValue(
-        pageTransformVector[currentPageNo].xOffset
-    );
-  }
-  if (ui->yOffsetDoubleSpinBox->value()
-      != pageTransformVector[currentPageNo].yOffset) {
-    ui->yOffsetDoubleSpinBox->setValue(
-        pageTransformVector[currentPageNo].yOffset
-    );
-  }
-  if (ui->scaleDoubleSpinBox->value()
-      != pageTransformVector[currentPageNo].scaleAmount) {
-    ui->scaleDoubleSpinBox->setValue(
-        pageTransformVector[currentPageNo].scaleAmount
-    );
-  }
-  if (ui->rotationDoubleSpinBox->value()
-      != pageTransformVector[currentPageNo].rotationAmount) {
-    ui->rotationDoubleSpinBox->setValue(
-        pageTransformVector[currentPageNo].rotationAmount
-    );
-  }
+  ui->xOffsetDoubleSpinBox->setValue(
+      pageTransformVector[currentPageNo].xOffset
+  );
+}
+
+void IsophineEditor::on_pageViewWidget_yOffsetChangedByKey() {
+  std::vector<PageTransform>& pageTransformVector =
+      ProjectSettings::instance().pageTransformVector;
+  int& currentPageNo = ProjectSettings::instance().currentPageNo;
+
+  ui->yOffsetDoubleSpinBox->setValue(
+      pageTransformVector[currentPageNo].yOffset
+  );
+}
+
+void IsophineEditor::on_pageViewWidget_scaleChangedByKey() {
+  std::vector<PageTransform>& pageTransformVector =
+      ProjectSettings::instance().pageTransformVector;
+  int& currentPageNo = ProjectSettings::instance().currentPageNo;
+
+  ui->scaleDoubleSpinBox->setValue(
+      pageTransformVector[currentPageNo].scaleAmount
+  );
+}
+
+void IsophineEditor::on_pageViewWidget_rotationChangedByKey() {
+  std::vector<PageTransform>& pageTransformVector =
+      ProjectSettings::instance().pageTransformVector;
+  int& currentPageNo = ProjectSettings::instance().currentPageNo;
+
+  ui->rotationDoubleSpinBox->setValue(
+      pageTransformVector[currentPageNo].rotationAmount
+  );
+}
+
+void IsophineEditor::on_pageViewWidget_pageTransformChanged() {
+  on_pageViewWidget_xOffsetChangedByKey();
+  on_pageViewWidget_yOffsetChangedByKey();
+  on_pageViewWidget_scaleChangedByKey();
+  on_pageViewWidget_rotationChangedByKey();
 }
