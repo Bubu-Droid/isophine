@@ -24,6 +24,8 @@ private slots:
   void on_actionToggleInspector_triggered(bool checked);
   void on_actionToggleThumbnail_triggered(bool checked);
 
+  void on_thumbnailView_activated(const QModelIndex& index);
+
   void on_xOffsetDoubleSpinBox_editingFinished();
   void on_xOffsetDoubleSpinBox_valueChanged(double arg1);
   void on_yOffsetDoubleSpinBox_editingFinished();
@@ -36,14 +38,12 @@ private slots:
   void on_actionZoom_In_triggered();
   void on_actionZoom_Out_triggered();
 
-  void on_thumbnailView_activated(const QModelIndex& index);
-
-  void on_pageViewWidget_pageTransformChanged();
-
   void on_pageViewWidget_xOffsetChangedByKey();
   void on_pageViewWidget_yOffsetChangedByKey();
   void on_pageViewWidget_scaleChangedByKey();
   void on_pageViewWidget_rotationChangedByKey();
+
+  void on_pageViewWidget_pageTransformChanged();
 
 private:
   Ui::IsophineEditor* ui;
