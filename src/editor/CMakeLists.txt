@@ -5,7 +5,6 @@ target_sources(isophine
     isophine_editor.ui
     pageviewer.cpp
     pageviewer.h
-    project_settings.cpp
     project_settings.h
 )
 

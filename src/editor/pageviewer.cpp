@@ -1,61 +1,52 @@
 #define KEY_EVENT_RETURN \
   update(); \
   emit pageTransformChangedByKey(); \
-  keyEvent->accept(); \
   return
 // TODO: too lazy to fix this rn, will fix later
 // also, update + return = upturn :) gonna use this
 
 #include "pageviewer.h"
 
-#include <qnamespace.h>
-#include <qpdfdocument.h>
-
 #include <QGuiApplication>
 #include <QPainter>
 #include <QPainterStateGuard>
-#include <QPdfDocument>
 #include <QPen>
-#include <QPixmap>
-#include <QSizeF>
-#include <QString>
-#include <print>
-#include <vector>
 
 #include "project_settings.h"
 
-// add initializers here
 PageViewer::PageViewer(QWidget* parent) :
     QWidget(parent),
+    m_pageCount(0),
     m_ppiX(QGuiApplication::primaryScreen()->physicalDotsPerInchX()),
     m_ppiY(QGuiApplication::primaryScreen()->physicalDotsPerInchY()) {
   ProjectSettings::instance().pdfDocument = new QPdfDocument(this);
 
-  ProjectSettings::instance().boundBoxHeight = 842 * (m_ppiX / 72.0f);
-  ProjectSettings::instance().boundBoxWidth = 595 * (m_ppiY / 72.0f);
+  ProjectSettings::instance().boundBoxHeight = 842 * (m_ppiX / 72.0);
+  ProjectSettings::instance().boundBoxWidth = 595 * (m_ppiY / 72.0);
 
   QPdfDocument*& pdfDocument = ProjectSettings::instance().pdfDocument;
   pdfDocument->load(ProjectSettings::instance().pdfPath);
+  m_pageCount = pdfDocument->pageCount();
 
   ProjectSettings::instance().pageTransformVector.resize(
       pdfDocument->pageCount()
   );
-  m_pageCount = pdfDocument->pageCount();
+
   loadPage();
 }
 
 void PageViewer::loadPage() {
-  QPdfDocument* pdfDocument = ProjectSettings::instance().pdfDocument;
+  QPdfDocument*& pdfDocument = ProjectSettings::instance().pdfDocument;
   int& currentPageNo = ProjectSettings::instance().currentPageNo;
 
-  // holy cow, this is so abstracted that even I'm being confused looking
-  // at what I've written -- not that I don't like it >:))
-  QSize currentPageSize =
-      QSizeF(
-          pdfDocument->pagePointSize(currentPageNo).width() * (m_ppiX / 72.0f),
-          pdfDocument->pagePointSize(currentPageNo).height() * (m_ppiY / 72.0f)
+  QSize currentPageSize = QSize(
+      qRound(
+          pdfDocument->pagePointSize(currentPageNo).width() * (m_ppiX / 72.0)
+      ),
+      qRound(
+          pdfDocument->pagePointSize(currentPageNo).height() * (m_ppiY / 72.0)
       )
-          .toSize();
+  );
 
   m_currentImage =
       QPixmap::fromImage(pdfDocument->render(currentPageNo, currentPageSize));
@@ -66,13 +57,13 @@ void PageViewer::keyPressEvent(QKeyEvent* event) {
   std::vector<PageTransform>& pageTransformVector =
       ProjectSettings::instance().pageTransformVector;
 
-  int& moveSmallAmount = ProjectSettings::instance().moveSmallAmount;
-  int& moveLargeAmount = ProjectSettings::instance().moveLargeAmount;
-  float& rotateSmallAmount = ProjectSettings::instance().rotateSmallAmount;
-  float& rotateLargeAmount = ProjectSettings::instance().rotateLargeAmount;
-  float& scalePageSmallAmount =
+  qreal& moveSmallAmount = ProjectSettings::instance().moveSmallAmount;
+  qreal& moveLargeAmount = ProjectSettings::instance().moveLargeAmount;
+  qreal& rotateSmallAmount = ProjectSettings::instance().rotateSmallAmount;
+  qreal& rotateLargeAmount = ProjectSettings::instance().rotateLargeAmount;
+  qreal& scalePageSmallAmount =
       ProjectSettings::instance().scalePageSmallAmount;
-  float& scalePageLargeAmount =
+  qreal& scalePageLargeAmount =
       ProjectSettings::instance().scalePageLargeAmount;
 
   Qt::Key& nextKey = ProjectSettings::instance().nextKey;
@@ -105,30 +96,27 @@ void PageViewer::keyPressEvent(QKeyEvent* event) {
 
   if (event->type() == QEvent::KeyPress) {
     QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
-    // I know, I know, I'm probably violating DRY.
+    // I know, I know, I'm probably violating the DRY principle.
     // How do I make this nicer, suggestions?
-    // I hate switch cases, btw.
+    // I hate switch cases, btw. Maybe I can use templates.
+    // Well, I'm too lazy to fix this rn, will fix this sometime later.
     // TODO: handle the edge cases where i'm trying to go more left than what the sliderbox is bounded by
     // fix the same for scaling
     if (keyEvent->key() == nextKey) {
-      if (currentPageNo == m_pageCount - 1) {
-      } else {
+      if (currentPageNo < m_pageCount - 1) {
         currentPageNo++;
         loadPage();
         update();
         emit pageTransformChangedByKey();
       }
-      keyEvent->accept();
       return;
     } else if (keyEvent->key() == prevKey) {
-      if (currentPageNo == 0) {
-      } else {
+      if (currentPageNo > 0) {
         currentPageNo--;
         loadPage();
         update();
         emit pageTransformChangedByKey();
       }
-      keyEvent->accept();
       return;
     } else if (keyEvent->text() == leftSmallKey) {
       pageTransformVector[currentPageNo].xOffset -= moveSmallAmount;
@@ -186,11 +174,11 @@ void PageViewer::keyPressEvent(QKeyEvent* event) {
 }
 
 void PageViewer::paintEvent(QPaintEvent* event) {
-  float& boundBoxHeight = ProjectSettings::instance().boundBoxHeight;
-  float& boundBoxWidth = ProjectSettings::instance().boundBoxWidth;
-  float boundBoxHalfWidth = boundBoxWidth / 2.0f;
-  float boundBoxHalfHeight = boundBoxHeight / 2.0f;
-  float& boundBoxScale = ProjectSettings::instance().boundBoxScale;
+  qreal& boundBoxHeight = ProjectSettings::instance().boundBoxHeight;
+  qreal& boundBoxWidth = ProjectSettings::instance().boundBoxWidth;
+  qreal boundBoxHalfWidth = boundBoxWidth / 2.0;
+  qreal boundBoxHalfHeight = boundBoxHeight / 2.0;
+  qreal& boundBoxScale = ProjectSettings::instance().boundBoxScale;
   int& boundBoxHorLinesCount =
       ProjectSettings::instance().boundBoxHorLinesCount;
   int& boundBoxVerLinesCount =
@@ -202,11 +190,11 @@ void PageViewer::paintEvent(QPaintEvent* event) {
 
   PageTransform& currentPageTransform = pageTransformVector[currentPageNo];
 
-  static const float viewerPaintDimension = 1200.0f;
-  float centerX = width() / 2.0f;
-  float centerY = height() / 2.0f;
-  float side = qMin(width(), height());
-  float painterScale = (side) * (boundBoxScale / viewerPaintDimension);
+  qreal viewerPaintDimension = 1200.0;
+  qreal centerX = width() / 2.0;
+  qreal centerY = height() / 2.0;
+  qreal side = qMin(width(), height());
+  qreal painterScale = (side) * (boundBoxScale / viewerPaintDimension);
 
   QPainter painter(this);
   painter.setRenderHint(QPainter::Antialiasing);
@@ -214,10 +202,10 @@ void PageViewer::paintEvent(QPaintEvent* event) {
   painter.translate(centerX, centerY);
   painter.scale(painterScale, painterScale);
 
-  float imgStartX = (-m_currentImage.width() / 2.0f);
-  float imgStartY = (-m_currentImage.height() / 2.0f);
+  qreal imgStartX = (-m_currentImage.width() / 2.0);
+  qreal imgStartY = (-m_currentImage.height() / 2.0);
 
-  // NOTE: What a cute fact I just figured out!
+  // What a cute fact I just figured out!
   // If you put the rotate statement before translate, then the axis of the
   // picture along which it is translated is also rotated!
   // Thus, the ordering of the statements is ABSOLUTELY CRITICAL!
@@ -264,8 +252,8 @@ void PageViewer::paintEvent(QPaintEvent* event) {
 
   painter.setPen(boundBoxGridPen);
 
-  float boundBoxHorLinesGap = boundBoxHeight / (boundBoxHorLinesCount + 1);
-  float boundBoxVerLinesGap = boundBoxWidth / (boundBoxVerLinesCount + 1);
+  qreal boundBoxHorLinesGap = boundBoxHeight / (boundBoxHorLinesCount + 1);
+  qreal boundBoxVerLinesGap = boundBoxWidth / (boundBoxVerLinesCount + 1);
 
   for (int i = 0; i < boundBoxHorLinesCount; ++i) {
     QPoint leftDrawPoint =

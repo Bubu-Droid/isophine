@@ -1,5 +1,4 @@
-#ifndef ISOPHINE_EDITOR_H
-#define ISOPHINE_EDITOR_H
+#pragma once
 
 #include <QMainWindow>
 
@@ -20,6 +19,7 @@ public:
 
 private slots:
 
+  // TODO: remove this and add a normal connect instead (to main.cpp)
   void on_actionQuit_triggered();
 
   void on_actionToggleInspector_triggered(bool checked);
@@ -44,4 +44,3 @@ private slots:
 private:
   Ui::IsophineEditor* ui;
 };
-#endif // ISOPHINE_EDITOR_H

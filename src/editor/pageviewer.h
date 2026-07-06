@@ -1,5 +1,4 @@
-#ifndef PAGEVIEWER_H
-#define PAGEVIEWER_H
+#pragma once
 
 #include <QKeyEvent>
 #include <QObject>
@@ -9,8 +8,9 @@
 
 class PageViewer: public QWidget {
   Q_OBJECT
+
 public:
-  PageViewer(QWidget* parent = nullptr);
+  explicit PageViewer(QWidget* parent = nullptr);
   void loadPage();
 
 signals:
@@ -21,10 +21,8 @@ protected:
   void keyPressEvent(QKeyEvent* event) override;
 
 private:
-  int m_pageCount = 0;
+  int m_pageCount;
   QPixmap m_currentImage;
   qreal m_ppiX;
   qreal m_ppiY;
 };
-
-#endif // PAGEVIEWER_H

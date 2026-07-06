@@ -1,9 +1,5 @@
 #include "isophine_editor.h"
 
-#include <QObject>
-#include <QPdfDocument>
-#include <vector>
-
 #include "pageviewer.h"
 #include "project_settings.h"
 #include "ui_isophine_editor.h"
@@ -14,7 +10,6 @@ IsophineEditor::IsophineEditor(QWidget* parent) :
   ui->setupUi(this);
 
   QPdfDocument*& pdfDocument = ProjectSettings::instance().pdfDocument;
-
   ui->thumbnailView->setModel(pdfDocument->pageModel());
 }
 
@@ -24,7 +19,7 @@ IsophineEditor::~IsophineEditor() {
 
 void IsophineEditor::on_actionQuit_triggered() {
   close();
-  // use QKeySequence::quit instead
+  // TODO: use QKeySequence::quit instead
 }
 
 void IsophineEditor::on_actionToggleInspector_triggered(bool checked) {
@@ -33,6 +28,7 @@ void IsophineEditor::on_actionToggleInspector_triggered(bool checked) {
 
 void IsophineEditor::on_actionToggleThumbnail_triggered(bool checked) {
   ui->thumbnailViewDockWidget->setVisible(checked);
+  // TODO:
   // gotta add dialog messages on failures here later on
   // add a signal and show a message to the statusbar
 }

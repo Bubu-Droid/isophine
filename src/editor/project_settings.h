@@ -1,19 +1,14 @@
-#ifndef PROJECT_SETTINGS_H
-#define PROJECT_SETTINGS_H
+#pragma once
 
-#include <qguiapplication.h>
-#include <qnamespace.h>
-
-#include <QGuiApplication>
 #include <QPdfDocument>
 #include <QString>
 #include <vector>
 
 struct PageTransform {
-  int xOffset = 0;
-  int yOffset = 0;
-  float rotationAmount = 0;
-  float scaleAmount = 1.0f;
+  qreal xOffset = 0;
+  qreal yOffset = 0;
+  qreal rotationAmount = 0;
+  qreal scaleAmount = 1.0;
 };
 
 class ProjectSettings {
@@ -26,26 +21,27 @@ public:
     return uniqueInstance;
   }
 
-  // QString pdfPath = "/home/bubu/Tests/latex-tests-2/main.pdf";
+  QPdfDocument* pdfDocument = nullptr;
   QString pdfPath =
       "/home/bubu/Desktop/college/num-ana/sem-2/bose-gupta-na-2.pdf";
-  QPdfDocument* pdfDocument = nullptr;
+  // QString pdfPath = "/home/bubu/Tests/latex-tests-2/main.pdf";
 
-  float boundBoxScale = 1.0f;
-  float boundBoxHeight = 0;
-  float boundBoxWidth = 0;
+  qreal boundBoxScale = 1.0;
+  qreal boundBoxHeight = 1122.67;
+  qreal boundBoxWidth = 793.33;
   int boundBoxHorLinesCount = 5;
-  int boundBoxVerLinesCount = 4;
+  int boundBoxVerLinesCount = 3;
   int currentPageNo = 0;
+  // TODO:
   // the value is allowed to go to a negative value, fix this
-  float zoomCanvasAmount = 0.25f;
+  qreal zoomCanvasAmount = 0.25;
 
-  int moveSmallAmount = 1;
-  int moveLargeAmount = 10;
-  float rotateSmallAmount = 0.1f;
-  float rotateLargeAmount = 1.0f;
-  float scalePageSmallAmount = 0.01f;
-  float scalePageLargeAmount = 0.1f;
+  qreal moveSmallAmount = 1.0;
+  qreal moveLargeAmount = 10.0;
+  qreal rotateSmallAmount = 0.1;
+  qreal rotateLargeAmount = 1.0;
+  qreal scalePageSmallAmount = 0.01;
+  qreal scalePageLargeAmount = 0.1;
 
   std::vector<PageTransform> pageTransformVector;
 
@@ -72,5 +68,3 @@ public:
   char rotateAntiClockSmallKey = 'e';
   char rotateAntiClockLargeKey = 'E';
 };
-
-#endif // PROJECT_SETTINGS_H
