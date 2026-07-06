@@ -303,11 +303,15 @@ void PageViewer::paintEvent(QPaintEvent* event) {
       boundBoxTopRightCorner
   };
 
-  QPen boundBoxBorderPen(palette().color(QPalette::Accent));
+  QPen boundBoxBorderPen(
+      palette().color(ProjectSettings::instance().boundBoxLineColor)
+  );
   boundBoxBorderPen.setWidth(1);
   boundBoxBorderPen.setCosmetic(true);
 
-  QPen boundBoxGridPen(palette().color(QPalette::Accent));
+  QPen boundBoxGridPen(
+      palette().color(ProjectSettings::instance().boundBoxLineColor)
+  );
   boundBoxGridPen.setWidth(1);
   boundBoxGridPen.setCosmetic(true);
 

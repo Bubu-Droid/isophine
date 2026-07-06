@@ -1,5 +1,8 @@
 #pragma once
 
+#include <qpalette.h>
+
+#include <QPalette>
 #include <QPdfDocument>
 #include <QString>
 #include <vector>
@@ -37,6 +40,7 @@ public:
   qreal boundBoxScale = 1.0;
   qreal boundBoxHeight = 1122.67;
   qreal boundBoxWidth = 793.33;
+  QPalette::ColorRole boundBoxLineColor = QPalette::Accent;
   int boundBoxHorLinesCount = 5;
   int boundBoxVerLinesCount = 3;
   int currentPageNo = 0;
