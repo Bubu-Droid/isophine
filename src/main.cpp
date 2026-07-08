@@ -1,10 +1,14 @@
 #include <QApplication>
 
-#include "isophine_editor.h"
+#include "dashboard.h"
+
+// #include "isophine_editor.h"
 
 int main(int argc, char* argv[]) {
   QApplication a(argc, argv);
-  IsophineEditor w;
+  Dashboard w;
   w.show();
+  // IsophineEditor w;
+  // w.show();
   return QApplication::exec();
 }
