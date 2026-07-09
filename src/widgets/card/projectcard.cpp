@@ -1,15 +1,42 @@
 #include "projectcard.h"
 
 #include <QHBoxLayout>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QSizePolicy>
 #include <QSpacerItem>
 #include <QVBoxLayout>
 
-ProjectCard::ProjectCard(QWidget* parent, const ProjectData& projDat) :
-    QWidget(parent) {
-  this->resize(800, 600);
-  this->setWindowTitle("ProjectCard");
+#include "messageboxes.h"
+#include "projsettingsdialog.h"
 
+void ProjectCard::on_openPushButton_clicked() {
+  emit openProject({});
+}
+
+void ProjectCard::on_settingsPushButton_clicked() {
+  QString oldProjName = m_projDat.projectName;
+  ProjSettingsDialog dialog = ProjSettingsDialog(this, m_projDat);
+  if (dialog.exec() == QDialog::Accepted) {
+    ProjectData newProjDat = dialog.getProjectData();
+    if (newProjDat.projectName.isEmpty() || newProjDat.pdfPath.isEmpty()
+        || newProjDat.layoutPath.isEmpty() || newProjDat.projOutDir.isEmpty()) {
+      ProjSettingsIncompleteMsgBox msgBox = ProjSettingsIncompleteMsgBox(this);
+      msgBox.exec();
+      return;
+    }
+    emit editProject(oldProjName, newProjDat);
+  }
+}
+
+void ProjectCard::on_deletePushButton_clicked() {
+  QString projName = m_projDat.projectName;
+  emit deleteProject(projName);
+}
+
+ProjectCard::ProjectCard(QWidget* parent, const ProjectData& projDat) :
+    QWidget(parent),
+    m_projDat(projDat) {
   QSizePolicy mainSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
   mainSizePolicy.setHorizontalStretch(0);
   mainSizePolicy.setVerticalStretch(0);
@@ -87,14 +114,32 @@ ProjectCard::ProjectCard(QWidget* parent, const ProjectData& projDat) :
   openPushButton = new QPushButton("Open", controlButtonsWidget);
   openPushButton->setObjectName("openPushButton");
   verticalLayout->addWidget(openPushButton);
+  connect(
+      openPushButton,
+      &QPushButton::clicked,
+      this,
+      &ProjectCard::on_openPushButton_clicked
+  );
 
   settingsPushButton = new QPushButton("Settings", controlButtonsWidget);
   settingsPushButton->setObjectName("settingsPushButton");
   verticalLayout->addWidget(settingsPushButton);
+  connect(
+      settingsPushButton,
+      &QPushButton::clicked,
+      this,
+      &ProjectCard::on_settingsPushButton_clicked
+  );
 
   deletePushButton = new QPushButton("Delete", controlButtonsWidget);
   deletePushButton->setObjectName("deletePushButton");
   verticalLayout->addWidget(deletePushButton);
+  connect(
+      deletePushButton,
+      &QPushButton::clicked,
+      this,
+      &ProjectCard::on_deletePushButton_clicked
+  );
 
   horizontalLayout->addWidget(controlButtonsWidget);
 }
