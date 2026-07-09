@@ -26,7 +26,7 @@ FileReadFailedMsgBox::FileReadFailedMsgBox(
 ) :
     QMessageBox(parent) {
   this->setDefaultButton(QMessageBox::NoButton);
-  this->setWindowTitle(tr("Failed To Read Database"));
+  this->setWindowTitle(tr("Failed to Read Database"));
   this->setText(tr(
       "Permission to read database file not granted, cannot run application."
   ));
@@ -42,7 +42,7 @@ FileReadFailedMsgBox::FileReadFailedMsgBox(
 SameProjectNameMsgBox::SameProjectNameMsgBox(QWidget* parent) :
     QMessageBox(parent) {
   this->setDefaultButton(QMessageBox::NoButton);
-  this->setWindowTitle(tr("Project Name Identical"));
+  this->setWindowTitle(tr("Duplicate Project Name"));
   this->setText(tr("Project names must be distinct!"));
   this->setIcon(QMessageBox::Warning);
 }
@@ -52,5 +52,17 @@ ProjSettingsIncompleteMsgBox::ProjSettingsIncompleteMsgBox(QWidget* parent) :
   this->setDefaultButton(QMessageBox::NoButton);
   this->setWindowTitle(tr("Incomplete Project Details"));
   this->setText(tr("All entries are compulsory, they must not be empty!"));
+  this->setIcon(QMessageBox::Warning);
+}
+
+DeleteConfirmationMsgBox::DeleteConfirmationMsgBox(QWidget* parent) :
+    QMessageBox(parent) {
+  this->setDefaultButton(QMessageBox::NoButton);
+  this->setWindowTitle(tr("Confirmation for Entry Deletion"));
+  this->setText(tr("Are you sure you want to delete the project entry?"));
+  this->setInformativeText(
+      "This deletes the entry from the projects list database, not the project files."
+  );
+  this->setStandardButtons(QMessageBox::Yes | QMessageBox::No);
   this->setIcon(QMessageBox::Warning);
 }
