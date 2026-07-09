@@ -7,14 +7,8 @@
     <x>0</x>
     <y>0</y>
     <width>293</width>
-    <height>300</height>
+    <height>293</height>
    </rect>
-  </property>
-  <property name="sizePolicy">
-   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
@@ -58,7 +52,7 @@
       <widget class="QLineEdit" name="projNameLineEdit"/>
      </item>
      <item row="2" column="0">
-      <widget class="QLabel" name="selectLayoutFile">
+      <widget class="QLabel" name="selectLayoutFileLabel">
        <property name="text">
         <string>Select Layout File:</string>
        </property>

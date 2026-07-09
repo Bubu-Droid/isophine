@@ -7,7 +7,7 @@ OpenProjectDialog::OpenProjectDialog(QWidget* parent) :
     QDialog(parent),
     ui(new Ui::OpenProjectDialog) {
   ui->setupUi(this);
-  this->setWindowTitle("Create New Project");
+  this->setWindowTitle("Open Existing Project");
 }
 
 OpenProjectDialog::~OpenProjectDialog() {
@@ -23,15 +23,6 @@ void OpenProjectDialog::on_selectPdfButton_clicked() {
   }
 }
 
-void OpenProjectDialog::on_selectOutDirButton_clicked() {
-  SelectOutDirDialog dialog = SelectOutDirDialog(this);
-
-  if (dialog.exec() == QDialog::Accepted) {
-    m_outDir = dialog.selectedFiles().constFirst();
-    ui->selectOutDirButton->setText(QFileInfo(m_outDir).fileName());
-  }
-}
-
 void OpenProjectDialog::on_selectLayoutPathButton_clicked() {
   SelectLayoutFileDialog dialog = SelectLayoutFileDialog(this);
 
@@ -41,12 +32,22 @@ void OpenProjectDialog::on_selectLayoutPathButton_clicked() {
   }
 }
 
-ProjectData OpenProjectDialog::getProjectData() const {
-  ProjectData data;
-  data.projectName = ui->projNameLineEdit->text();
-  data.pdfPath = m_pdfPath;
-  data.projOutDir = m_outDir;
-  data.layoutPath = m_layoutPath;
+void OpenProjectDialog::on_selectOutDirButton_clicked() {
+  SelectOutDirDialog dialog = SelectOutDirDialog(this);
 
-  return data;
+  if (dialog.exec() == QDialog::Accepted) {
+    m_outDir = dialog.selectedFiles().constFirst();
+    ui->selectOutDirButton->setText(QFileInfo(m_outDir).fileName());
+  }
+}
+
+ProjectData OpenProjectDialog::getProjectData() const {
+  ProjectData projDat;
+  projDat.projectName = ui->projNameLineEdit->text();
+  projDat.pdfPath = m_pdfPath;
+  projDat.layoutPath = m_layoutPath;
+  projDat.projOutDir = m_outDir;
+  projDat.isExisting = true;
+
+  return projDat;
 }
