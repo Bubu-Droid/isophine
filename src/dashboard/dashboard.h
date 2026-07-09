@@ -16,6 +16,9 @@ struct ProjectData {
   QString pdfPath;
   QString layoutPath;
   QString projOutDir;
+  qreal boundBoxHeight = 1.0;
+  qreal boundBoxWidth = 1.0;
+  bool isExisting = false;
 };
 
 class Dashboard: public QMainWindow {
@@ -27,14 +30,17 @@ public:
 
 private slots:
   void loadProjects();
-  void saveProjects(const ProjectData& projDat);
+  void saveProject(const ProjectData& projDat);
+  void openProject(const ProjectData& projDat);
+  void editProject(const QString& oldProjName, const ProjectData& projDat);
+  void deleteProject(const QString& projName);
   void on_actionQuit_triggered();
   void on_actionNew_Project_triggered();
   void on_actionOpen_Existing_Project_triggered();
 
 private:
   Ui::Dashboard* ui;
-  void validateConfig();
+  void validateDB();
   QString m_saveDirPath;
   QString m_projectsListFileName;
   QFile m_projectsListFile;
