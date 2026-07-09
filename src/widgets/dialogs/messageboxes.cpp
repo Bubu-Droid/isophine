@@ -61,7 +61,7 @@ DeleteConfirmationMsgBox::DeleteConfirmationMsgBox(QWidget* parent) :
   this->setWindowTitle(tr("Confirmation for Entry Deletion"));
   this->setText(tr("Are you sure you want to delete the project entry?"));
   this->setInformativeText(
-      "This deletes the entry from the projects list database, not the project files."
+      "This deletes the entry from the projects list database, not the project related files."
   );
   this->setStandardButtons(QMessageBox::Yes | QMessageBox::No);
   this->setIcon(QMessageBox::Warning);
