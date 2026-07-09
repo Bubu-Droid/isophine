@@ -1,7 +1,5 @@
 #include "newprojectdialog.h"
 
-#include <QStandardPaths>
-
 #include "buttondialogs.h"
 #include "ui_newprojectdialog.h"
 
@@ -35,12 +33,15 @@ void NewProjectDialog::on_selectOutDirButton_clicked() {
 }
 
 ProjectData NewProjectDialog::getProjectData() const {
-  ProjectData data;
-  data.projectName = ui->projNameLineEdit->text();
-  data.pdfPath = m_pdfPath;
-  data.projOutDir = m_outDir;
-  data.layoutPath =
-      QDir(m_outDir).filePath(QString("%1_layout.json").arg(data.projectName));
+  ProjectData projDat;
+  projDat.projectName = ui->projNameLineEdit->text();
+  projDat.pdfPath = m_pdfPath;
+  projDat.layoutPath = QDir(m_outDir).filePath(
+      QString("%1_layout.json").arg(projDat.projectName)
+  );
+  projDat.projOutDir = m_outDir;
+  projDat.boundBoxHeight = ui->selectOutPdfHeightSpinBox->value();
+  projDat.boundBoxWidth = ui->selectOutPdfWidthSpinBox->value();
 
-  return data;
+  return projDat;
 }
