@@ -1,24 +1,40 @@
 #pragma once
 
 #include <QFileDialog>
+#include <QStandardPaths>
 
 class SelectPDFDialog: public QFileDialog {
   Q_OBJECT
 
 public:
-  explicit SelectPDFDialog(QWidget* parent = nullptr);
+  SelectPDFDialog() = delete;
+  explicit SelectPDFDialog(
+      QWidget* parent = nullptr,
+      QString setDirPath =
+          QStandardPaths::writableLocation(QStandardPaths::HomeLocation)
+  );
 };
 
 class SelectOutDirDialog: public QFileDialog {
   Q_OBJECT
 
 public:
-  explicit SelectOutDirDialog(QWidget* parent = nullptr);
+  SelectOutDirDialog() = delete;
+  explicit SelectOutDirDialog(
+      QWidget* parent = nullptr,
+      QString setDirPath =
+          QStandardPaths::writableLocation(QStandardPaths::HomeLocation)
+  );
 };
 
 class SelectLayoutFileDialog: public QFileDialog {
   Q_OBJECT
 
 public:
-  explicit SelectLayoutFileDialog(QWidget* parent = nullptr);
+  SelectLayoutFileDialog() = delete;
+  explicit SelectLayoutFileDialog(
+      QWidget* parent = nullptr,
+      QString setDirPath =
+          QStandardPaths::writableLocation(QStandardPaths::HomeLocation)
+  );
 };
