@@ -10,6 +10,9 @@ target_sources(isophine
     openprojectdialog.cpp
     openprojectdialog.h
     openprojectdialog.ui
+    projsettingsdialog.cpp
+    projsettingsdialog.h
+    projsettingsdialog.ui
 )
 
 target_include_directories(isophine
