@@ -1,7 +1,5 @@
 #include "openprojectdialog.h"
 
-#include <QStandardPaths>
-
 #include "buttondialogs.h"
 #include "ui_openprojectdialog.h"
 
