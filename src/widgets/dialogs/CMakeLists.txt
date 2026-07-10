@@ -13,6 +13,9 @@ target_sources(isophine
     projsettingsdialog.cpp
     projsettingsdialog.h
     projsettingsdialog.ui
+    appsettingsdialog.cpp
+    appsettingsdialog.h
+    appsettingsdialog.ui
 )
 
 target_include_directories(isophine
