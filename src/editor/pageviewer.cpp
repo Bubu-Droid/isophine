@@ -62,42 +62,54 @@ void PageViewer::keyPressEvent(QKeyEvent* event) {
   qreal& scalePageLargeAmount =
       ProjectSettings::instance().scalePageLargeAmount;
 
-  Qt::Key& nextKey = ProjectSettings::instance().nextKey;
-  Qt::Key& prevKey = ProjectSettings::instance().prevKey;
+  QKeySequence& nextKey = ProjectSettings::instance().nextKey;
+  QKeySequence& prevKey = ProjectSettings::instance().prevKey;
 
-  Qt::Key& scalePageUpSmallKey =
+  QKeySequence& scalePageUpSmallKey =
       ProjectSettings::instance().scalePageUpSmallKey;
-  Qt::Key& scalePageUpLargeKey =
+  QKeySequence& scalePageUpLargeKey =
       ProjectSettings::instance().scalePageUpLargeKey;
-  Qt::Key& scalePageDownSmallKey =
+  QKeySequence& scalePageDownSmallKey =
       ProjectSettings::instance().scalePageDownSmallKey;
-  Qt::Key& scalePageDownLargeKey =
+  QKeySequence& scalePageDownLargeKey =
       ProjectSettings::instance().scalePageDownLargeKey;
 
-  char& leftSmallKey = ProjectSettings::instance().leftSmallKey;
-  char& leftLargeKey = ProjectSettings::instance().leftLargeKey;
-  char& downSmallKey = ProjectSettings::instance().downSmallKey;
-  char& downLargeKey = ProjectSettings::instance().downLargeKey;
-  char& upSmallKey = ProjectSettings::instance().upSmallKey;
-  char& upLargeKey = ProjectSettings::instance().upLargeKey;
-  char& rightSmallKey = ProjectSettings::instance().rightSmallKey;
-  char& rightLargeKey = ProjectSettings::instance().rightLargeKey;
+  QKeySequence& leftSmallKey = ProjectSettings::instance().leftSmallKey;
+  QKeySequence& leftLargeKey = ProjectSettings::instance().leftLargeKey;
+  QKeySequence& downSmallKey = ProjectSettings::instance().downSmallKey;
+  QKeySequence& downLargeKey = ProjectSettings::instance().downLargeKey;
+  QKeySequence& upSmallKey = ProjectSettings::instance().upSmallKey;
+  QKeySequence& upLargeKey = ProjectSettings::instance().upLargeKey;
+  QKeySequence& rightSmallKey = ProjectSettings::instance().rightSmallKey;
+  QKeySequence& rightLargeKey = ProjectSettings::instance().rightLargeKey;
 
-  char& rotateClockSmallKey = ProjectSettings::instance().rotateClockSmallKey;
-  char& rotateClockLargeKey = ProjectSettings::instance().rotateClockLargeKey;
-  char& rotateAntiClockSmallKey =
+  QKeySequence& rotateClockSmallKey =
+      ProjectSettings::instance().rotateClockSmallKey;
+  QKeySequence& rotateClockLargeKey =
+      ProjectSettings::instance().rotateClockLargeKey;
+  QKeySequence& rotateAntiClockSmallKey =
       ProjectSettings::instance().rotateAntiClockSmallKey;
-  char& rotateAntiClockLargeKey =
+  QKeySequence& rotateAntiClockLargeKey =
       ProjectSettings::instance().rotateAntiClockLargeKey;
 
+  // What a huge heartbreak I had when I realized
+  // that we have something called QKeySequence and that I now have to
+  // re-write the logic of appsettingsdialog + keyPressEvent.
+  //
+  // Woah, it wasn't really that difficult. All I needed was a bunch of
+  // vim substitutes and boom, I was done!
   if (event->type() == QEvent::KeyPress) {
-    QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
+    QKeyCombination keyCombination =
+        static_cast<QKeyEvent*>(event)->keyCombination();
+    QKeySequence keySequence =
+        QKeySequence(keyCombination.keyboardModifiers() | keyCombination.key());
+
     // I know, I know, I'm probably violating the DRY principle.
     // How do I make this nicer, suggestions?
     // I hate switch cases, btw. Maybe I can use templates or
     // maybe write a throwaway function.
     // Well, I'm too lazy to fix this rn, will fix this sometime later.
-    if (keyEvent->key() == nextKey) {
+    if (keySequence == nextKey) {
       if (currentPageNo < m_pageCount - 1) {
         currentPageNo++;
         loadPage();
@@ -105,7 +117,7 @@ void PageViewer::keyPressEvent(QKeyEvent* event) {
         emit pageTransformChanged();
       }
       return;
-    } else if (keyEvent->key() == prevKey) {
+    } else if (keySequence == prevKey) {
       if (currentPageNo > 0) {
         currentPageNo--;
         loadPage();
@@ -113,63 +125,63 @@ void PageViewer::keyPressEvent(QKeyEvent* event) {
         emit pageTransformChanged();
       }
       return;
-    } else if (keyEvent->text() == leftSmallKey) {
+    } else if (keySequence == leftSmallKey) {
       if (currentPageTransform.xOffset - moveSmallAmount >= -MAX_OFFSET_MAG) {
         currentPageTransform.xOffset -= moveSmallAmount;
       }
       update();
       emit xOffsetChangedByKey();
       return;
-    } else if (keyEvent->text() == leftLargeKey) {
+    } else if (keySequence == leftLargeKey) {
       if (currentPageTransform.xOffset - moveLargeAmount >= -MAX_OFFSET_MAG) {
         currentPageTransform.xOffset -= moveLargeAmount;
       }
       update();
       emit xOffsetChangedByKey();
       return;
-    } else if (keyEvent->text() == downSmallKey) {
+    } else if (keySequence == downSmallKey) {
       if (currentPageTransform.yOffset + moveSmallAmount <= MAX_OFFSET_MAG) {
         currentPageTransform.yOffset += moveSmallAmount;
       }
       update();
       emit yOffsetChangedByKey();
       return;
-    } else if (keyEvent->text() == downLargeKey) {
+    } else if (keySequence == downLargeKey) {
       if (currentPageTransform.yOffset + moveLargeAmount <= MAX_OFFSET_MAG) {
         currentPageTransform.yOffset += moveLargeAmount;
       }
       update();
       emit yOffsetChangedByKey();
       return;
-    } else if (keyEvent->text() == upSmallKey) {
+    } else if (keySequence == upSmallKey) {
       if (currentPageTransform.yOffset - moveSmallAmount >= -MAX_OFFSET_MAG) {
         currentPageTransform.yOffset -= moveSmallAmount;
       }
       update();
       emit yOffsetChangedByKey();
       return;
-    } else if (keyEvent->text() == upLargeKey) {
+    } else if (keySequence == upLargeKey) {
       if (currentPageTransform.yOffset - moveLargeAmount >= -MAX_OFFSET_MAG) {
         currentPageTransform.yOffset -= moveLargeAmount;
       }
       update();
       emit yOffsetChangedByKey();
       return;
-    } else if (keyEvent->text() == rightSmallKey) {
+    } else if (keySequence == rightSmallKey) {
       if (currentPageTransform.xOffset + moveSmallAmount <= MAX_OFFSET_MAG) {
         currentPageTransform.xOffset += moveSmallAmount;
       }
       update();
       emit xOffsetChangedByKey();
       return;
-    } else if (keyEvent->text() == rightLargeKey) {
+    } else if (keySequence == rightLargeKey) {
       if (currentPageTransform.xOffset + moveLargeAmount <= MAX_OFFSET_MAG) {
         currentPageTransform.xOffset += moveLargeAmount;
       }
       update();
       emit xOffsetChangedByKey();
       return;
-    } else if (keyEvent->text() == rotateClockSmallKey) {
+    } else if (keySequence == rotateClockSmallKey) {
       currentPageTransform.rotationAmount = std::fmod(
           currentPageTransform.rotationAmount + rotateSmallAmount,
           360.0f
@@ -177,7 +189,7 @@ void PageViewer::keyPressEvent(QKeyEvent* event) {
       update();
       emit rotationChangedByKey();
       return;
-    } else if (keyEvent->text() == rotateClockLargeKey) {
+    } else if (keySequence == rotateClockLargeKey) {
       currentPageTransform.rotationAmount = std::fmod(
           currentPageTransform.rotationAmount + rotateLargeAmount,
           360.0f
@@ -185,7 +197,7 @@ void PageViewer::keyPressEvent(QKeyEvent* event) {
       update();
       emit rotationChangedByKey();
       return;
-    } else if (keyEvent->text() == rotateAntiClockSmallKey) {
+    } else if (keySequence == rotateAntiClockSmallKey) {
       currentPageTransform.rotationAmount = std::fmod(
           currentPageTransform.rotationAmount - rotateSmallAmount,
           360.0f
@@ -193,7 +205,7 @@ void PageViewer::keyPressEvent(QKeyEvent* event) {
       update();
       emit rotationChangedByKey();
       return;
-    } else if (keyEvent->text() == rotateAntiClockLargeKey) {
+    } else if (keySequence == rotateAntiClockLargeKey) {
       currentPageTransform.rotationAmount = std::fmod(
           currentPageTransform.rotationAmount - rotateLargeAmount,
           360.0f
@@ -201,7 +213,7 @@ void PageViewer::keyPressEvent(QKeyEvent* event) {
       update();
       emit rotationChangedByKey();
       return;
-    } else if (keyEvent->key() == scalePageUpSmallKey) {
+    } else if (keySequence == scalePageUpSmallKey) {
       if (currentPageTransform.scaleAmount + scalePageSmallAmount
           <= MAX_SCALE) {
         currentPageTransform.scaleAmount += scalePageSmallAmount;
@@ -209,7 +221,7 @@ void PageViewer::keyPressEvent(QKeyEvent* event) {
       update();
       emit scaleChangedByKey();
       return;
-    } else if (keyEvent->key() == scalePageUpLargeKey) {
+    } else if (keySequence == scalePageUpLargeKey) {
       if (currentPageTransform.scaleAmount + scalePageLargeAmount
           <= MAX_SCALE) {
         currentPageTransform.scaleAmount += scalePageLargeAmount;
@@ -217,7 +229,7 @@ void PageViewer::keyPressEvent(QKeyEvent* event) {
       update();
       emit scaleChangedByKey();
       return;
-    } else if (keyEvent->key() == scalePageDownSmallKey) {
+    } else if (keySequence == scalePageDownSmallKey) {
       if (currentPageTransform.scaleAmount - scalePageSmallAmount
           >= MIN_SCALE) {
         currentPageTransform.scaleAmount -= scalePageSmallAmount;
@@ -225,7 +237,7 @@ void PageViewer::keyPressEvent(QKeyEvent* event) {
       update();
       emit scaleChangedByKey();
       return;
-    } else if (keyEvent->key() == scalePageDownLargeKey) {
+    } else if (keySequence == scalePageDownLargeKey) {
       if (currentPageTransform.scaleAmount - scalePageLargeAmount
           >= MIN_SCALE) {
         currentPageTransform.scaleAmount -= scalePageLargeAmount;
@@ -303,15 +315,11 @@ void PageViewer::paintEvent(QPaintEvent* event) {
       boundBoxTopRightCorner
   };
 
-  QPen boundBoxBorderPen(
-      palette().color(ProjectSettings::instance().boundBoxLineColor)
-  );
+  QPen boundBoxBorderPen(ProjectSettings::instance().boundBoxLineColor);
   boundBoxBorderPen.setWidth(1);
   boundBoxBorderPen.setCosmetic(true);
 
-  QPen boundBoxGridPen(
-      palette().color(ProjectSettings::instance().boundBoxLineColor)
-  );
+  QPen boundBoxGridPen(ProjectSettings::instance().boundBoxLineColor);
   boundBoxGridPen.setWidth(1);
   boundBoxGridPen.setCosmetic(true);
 

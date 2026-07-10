@@ -1,5 +1,10 @@
 #pragma once
 
+#include <qkeysequence.h>
+#include <qnamespace.h>
+#include <qobject.h>
+
+#include <QKeySequence>
 #include <QPalette>
 #include <QPdfDocument>
 #include <QString>
@@ -38,9 +43,10 @@ public:
   qreal boundBoxScale = 1.0;
   qreal boundBoxHeight = 1122.67;
   qreal boundBoxWidth = 793.33;
-  QPalette::ColorRole boundBoxLineColor = QPalette::Accent;
+  QColor boundBoxLineColor = QPalette::Accent;
   int boundBoxHorLinesCount = 5;
   int boundBoxVerLinesCount = 3;
+  // NOTE: this is not added into the settings
   int currentPageNo = 0;
   qreal zoomCanvasAmount = 0.25;
 
@@ -53,26 +59,30 @@ public:
 
   std::vector<PageTransform> pageTransformVector;
 
-  Qt::Key nextKey = Qt::Key_N;
-  Qt::Key prevKey = Qt::Key_P;
+  QKeySequence nextKey = QKeySequence(Qt::Key_N);
+  QKeySequence prevKey = QKeySequence(Qt::Key_P);
 
-  Qt::Key scalePageUpSmallKey = Qt::Key_Equal;
-  Qt::Key scalePageUpLargeKey = Qt::Key_Plus;
-  Qt::Key scalePageDownSmallKey = Qt::Key_Minus;
-  Qt::Key scalePageDownLargeKey = Qt::Key_Underscore;
+  QKeySequence scalePageUpSmallKey = QKeySequence(Qt::Key_Equal);
+  QKeySequence scalePageUpLargeKey =
+      QKeySequence(Qt::ShiftModifier | Qt::Key_Plus);
+  QKeySequence scalePageDownSmallKey = QKeySequence(Qt::Key_Minus);
+  QKeySequence scalePageDownLargeKey =
+      QKeySequence(Qt::ShiftModifier | Qt::Key_Underscore);
 
-  char leftSmallKey = 'h';
-  char leftLargeKey = 'H';
-  char downSmallKey = 'j';
-  char downLargeKey = 'J';
-  char upSmallKey = 'k';
-  char upLargeKey = 'K';
-  char rightSmallKey = 'l';
-  char rightLargeKey = 'L';
+  QKeySequence leftSmallKey = QKeySequence(Qt::Key_H);
+  QKeySequence leftLargeKey = QKeySequence(Qt::ShiftModifier | Qt::Key_H);
+  QKeySequence downSmallKey = QKeySequence(Qt::Key_J);
+  QKeySequence downLargeKey = QKeySequence(Qt::ShiftModifier | Qt::Key_J);
+  QKeySequence upSmallKey = QKeySequence(Qt::Key_K);
+  QKeySequence upLargeKey = QKeySequence(Qt::ShiftModifier | Qt::Key_K);
+  QKeySequence rightSmallKey = QKeySequence(Qt::Key_L);
+  QKeySequence rightLargeKey = QKeySequence(Qt::ShiftModifier | Qt::Key_L);
 
-  char rotateClockSmallKey = 'r';
-  char rotateClockLargeKey = 'R';
+  QKeySequence rotateClockSmallKey = QKeySequence(Qt::Key_R);
+  QKeySequence rotateClockLargeKey =
+      QKeySequence(Qt::ShiftModifier | Qt::Key_R);
 
-  char rotateAntiClockSmallKey = 'e';
-  char rotateAntiClockLargeKey = 'E';
+  QKeySequence rotateAntiClockSmallKey = QKeySequence(Qt::Key_E);
+  QKeySequence rotateAntiClockLargeKey =
+      QKeySequence(Qt::ShiftModifier | Qt::Key_E);
 };
