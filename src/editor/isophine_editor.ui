@@ -52,7 +52,6 @@
     <property name="title">
      <string>Settings</string>
     </property>
-    <addaction name="actionEditLocalSettings"/>
     <addaction name="actionEditGlobalSettings"/>
    </widget>
    <widget class="QMenu" name="menuView">
@@ -291,6 +290,9 @@
    <property name="shortcut">
     <string>Ctrl+S</string>
    </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
   </action>
   <action name="actionSaveAs">
    <property name="text">
@@ -299,6 +301,9 @@
    <property name="shortcut">
     <string>Ctrl+Shift+S</string>
    </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
   </action>
   <action name="actionExport">
    <property name="text">
@@ -306,6 +311,9 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+R</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="actionHome">
@@ -318,20 +326,19 @@
    <property name="shortcut">
     <string>Ctrl+H</string>
    </property>
-  </action>
-  <action name="actionViewKeymaps">
-   <property name="text">
-    <string>View Current Settings</string>
-   </property>
-  </action>
-  <action name="actionEditLocalSettings">
-   <property name="text">
-    <string>Edit Project Settings</string>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="actionEditGlobalSettings">
    <property name="text">
     <string>Edit App Settings</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+,</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::PreferencesRole</enum>
    </property>
   </action>
   <action name="actionToggleInspector">
@@ -347,6 +354,9 @@
    <property name="shortcut">
     <string>Ctrl+I</string>
    </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
   </action>
   <action name="actionToggleThumbnail">
    <property name="checkable">
@@ -360,6 +370,9 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+V</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="actionQuit">
@@ -380,6 +393,9 @@
    <property name="shortcut">
     <string>Ctrl+=</string>
    </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
   </action>
   <action name="actionZoom_Out">
    <property name="text">
@@ -387,6 +403,9 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+-</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
  </widget>

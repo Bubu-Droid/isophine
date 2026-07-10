@@ -57,6 +57,9 @@
    <property name="shortcut">
     <string>Ctrl+O</string>
    </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
   </action>
   <action name="actionNew_Project">
    <property name="text">
@@ -65,10 +68,16 @@
    <property name="shortcut">
     <string>Ctrl+N</string>
    </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
   </action>
   <action name="actionEdit_App_Settings">
    <property name="text">
     <string>Edit App Settings</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+,</string>
    </property>
    <property name="menuRole">
     <enum>QAction::MenuRole::PreferencesRole</enum>
