@@ -37,6 +37,7 @@ private slots:
   void on_actionQuit_triggered();
   void on_actionNew_Project_triggered();
   void on_actionOpen_Existing_Project_triggered();
+  void on_actionEdit_App_Settings_triggered();
 
 private:
   Ui::Dashboard* ui;

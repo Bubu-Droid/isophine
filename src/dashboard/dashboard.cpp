@@ -10,6 +10,7 @@
 #include <QStandardPaths>
 #include <cstdlib>
 
+#include "appsettingsdialog.h"
 #include "messageboxes.h"
 #include "newprojectdialog.h"
 #include "openprojectdialog.h"
@@ -298,5 +299,12 @@ void Dashboard::validateDB() {
       msgBox.exec();
       std::exit(EX_CONFIG);
     }
+  }
+}
+
+void Dashboard::on_actionEdit_App_Settings_triggered() {
+  AppSettingsDialog dialog = AppSettingsDialog(this);
+  if (dialog.exec() == QDialog::Accepted) {
+    dialog.updateSettings();
   }
 }
