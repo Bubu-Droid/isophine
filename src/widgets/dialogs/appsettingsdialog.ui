@@ -1,0 +1,602 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AppSettingsDialog</class>
+ <widget class="QDialog" name="AppSettingsDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>348</width>
+    <height>439</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>2</number>
+     </property>
+     <widget class="QWidget" name="canvasTab">
+      <attribute name="title">
+       <string>Canvas</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_4">
+       <item row="0" column="0">
+        <layout class="QFormLayout" name="formLayout_3">
+         <item row="0" column="0">
+          <widget class="QLabel" name="boxHeightLabel">
+           <property name="text">
+            <string>Bound Box Height:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QDoubleSpinBox" name="boxHeightSpinBox">
+           <property name="focusPolicy">
+            <enum>Qt::FocusPolicy::StrongFocus</enum>
+           </property>
+           <property name="buttonSymbols">
+            <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
+           </property>
+           <property name="minimum">
+            <double>1.000000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>3000.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="boxWidthLabel">
+           <property name="text">
+            <string>Bound Box Width:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QDoubleSpinBox" name="boxWidthSpinBox">
+           <property name="focusPolicy">
+            <enum>Qt::FocusPolicy::StrongFocus</enum>
+           </property>
+           <property name="buttonSymbols">
+            <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
+           </property>
+           <property name="minimum">
+            <double>1.000000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>3000.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="boxScaleLabel">
+           <property name="text">
+            <string>Bound Box Scale:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="horLinesLabel">
+           <property name="text">
+            <string>Horizontal Gridlines Count:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="verLinesLabel">
+           <property name="text">
+            <string>Vertical Gridlines Count:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QLabel" name="lineColorLabel">
+           <property name="text">
+            <string>Gridline Color:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QDoubleSpinBox" name="boxScaleSpinBox">
+           <property name="focusPolicy">
+            <enum>Qt::FocusPolicy::StrongFocus</enum>
+           </property>
+           <property name="buttonSymbols">
+            <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
+           </property>
+           <property name="minimum">
+            <double>0.250000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>5.000000000000000</double>
+           </property>
+           <property name="singleStep">
+            <double>0.250000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QDoubleSpinBox" name="horLinesSpinBox">
+           <property name="focusPolicy">
+            <enum>Qt::FocusPolicy::StrongFocus</enum>
+           </property>
+           <property name="buttonSymbols">
+            <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
+           </property>
+           <property name="decimals">
+            <number>0</number>
+           </property>
+           <property name="minimum">
+            <double>1.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <widget class="QDoubleSpinBox" name="verLinesSpinBox">
+           <property name="focusPolicy">
+            <enum>Qt::FocusPolicy::StrongFocus</enum>
+           </property>
+           <property name="buttonSymbols">
+            <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
+           </property>
+           <property name="decimals">
+            <number>0</number>
+           </property>
+           <property name="minimum">
+            <double>1.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1">
+          <widget class="QPushButton" name="colorPushButton">
+           <property name="text">
+            <string>Open Color Dialog</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="incrementsTab">
+      <attribute name="title">
+       <string>Increments</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="0" column="0">
+        <layout class="QFormLayout" name="formLayout_2">
+         <item row="0" column="0">
+          <widget class="QLabel" name="transSmallLabel">
+           <property name="text">
+            <string>Translate Amount (small):</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="transLargeLabel">
+           <property name="text">
+            <string>Translate Amount (large):</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="scaleSmallLabel">
+           <property name="text">
+            <string>Scale Amount (small):</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="scaleLargeLabel">
+           <property name="text">
+            <string>Scale Amount (large):</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="rotateSmallLabel">
+           <property name="text">
+            <string>Rotate Amount (small):</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QLabel" name="rotateLargeLabel">
+           <property name="text">
+            <string>Rotate Amount (large):</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QDoubleSpinBox" name="transSmallSpinBox">
+           <property name="focusPolicy">
+            <enum>Qt::FocusPolicy::StrongFocus</enum>
+           </property>
+           <property name="buttonSymbols">
+            <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
+           </property>
+           <property name="decimals">
+            <number>0</number>
+           </property>
+           <property name="minimum">
+            <double>1.000000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>10.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QDoubleSpinBox" name="transLargeSpinBox">
+           <property name="focusPolicy">
+            <enum>Qt::FocusPolicy::StrongFocus</enum>
+           </property>
+           <property name="buttonSymbols">
+            <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
+           </property>
+           <property name="decimals">
+            <number>0</number>
+           </property>
+           <property name="minimum">
+            <double>1.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QDoubleSpinBox" name="scaleSmallSpinBox">
+           <property name="focusPolicy">
+            <enum>Qt::FocusPolicy::StrongFocus</enum>
+           </property>
+           <property name="buttonSymbols">
+            <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
+           </property>
+           <property name="decimals">
+            <number>3</number>
+           </property>
+           <property name="minimum">
+            <double>0.001000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QDoubleSpinBox" name="scaleLargeSpinBox">
+           <property name="focusPolicy">
+            <enum>Qt::FocusPolicy::StrongFocus</enum>
+           </property>
+           <property name="buttonSymbols">
+            <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
+           </property>
+           <property name="minimum">
+            <double>0.010000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <widget class="QDoubleSpinBox" name="rotateSmallSpinBox">
+           <property name="focusPolicy">
+            <enum>Qt::FocusPolicy::StrongFocus</enum>
+           </property>
+           <property name="buttonSymbols">
+            <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
+           </property>
+           <property name="minimum">
+            <double>0.010000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1">
+          <widget class="QDoubleSpinBox" name="rotateLargeSpinBox">
+           <property name="focusPolicy">
+            <enum>Qt::FocusPolicy::StrongFocus</enum>
+           </property>
+           <property name="buttonSymbols">
+            <enum>QAbstractSpinBox::ButtonSymbols::NoButtons</enum>
+           </property>
+           <property name="decimals">
+            <number>1</number>
+           </property>
+           <property name="minimum">
+            <double>0.100000000000000</double>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="keybindingsTab">
+      <attribute name="title">
+       <string>Keybindings</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="1">
+        <layout class="QGridLayout" name="gridLayout_5">
+         <item row="1" column="0">
+          <widget class="QLabel" name="prevPageKeyLabel">
+           <property name="text">
+            <string>Previous Page Key:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="0">
+          <widget class="QLabel" name="moveLeftLabel">
+           <property name="text">
+            <string>Move Left:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="2">
+          <widget class="QLabel" name="largeKeyColumnLabel">
+           <property name="text">
+            <string>Large Key</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="Line" name="line">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="9" column="0">
+          <widget class="QLabel" name="rotateClockLabel">
+           <property name="text">
+            <string>Rotate Clockwise:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="nextPageKeyLabel">
+           <property name="text">
+            <string>Next Page Key:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="10" column="0">
+          <widget class="QLabel" name="rotateAntiClockLabel">
+           <property name="text">
+            <string>Rotate Anti-clockwise:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QLabel" name="smallKeyColumnLabel">
+           <property name="text">
+            <string>Small Key</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="0">
+          <widget class="QLabel" name="moveDownLabel">
+           <property name="text">
+            <string>Move Down:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="8" column="0">
+          <widget class="QLabel" name="moveRightLabel">
+           <property name="text">
+            <string>Move Right:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QLabel" name="moveUpLabel">
+           <property name="text">
+            <string>Move Up:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="11" column="0">
+          <widget class="QLabel" name="scaleUpLabel">
+           <property name="text">
+            <string>Scale Up:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="12" column="0">
+          <widget class="QLabel" name="scaleDownLabel">
+           <property name="text">
+            <string>Scale Down:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QKeySequenceEdit" name="nextPageKey">
+           <property name="maximumSequenceLength">
+            <longLong>1</longLong>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QKeySequenceEdit" name="prevPageKey">
+           <property name="maximumSequenceLength">
+            <longLong>1</longLong>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="Line" name="line_2">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="2">
+          <widget class="Line" name="line_3">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1">
+          <widget class="QKeySequenceEdit" name="moveUpSmallKey">
+           <property name="maximumSequenceLength">
+            <longLong>1</longLong>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="2">
+          <widget class="QKeySequenceEdit" name="moveUpLargeKey">
+           <property name="maximumSequenceLength">
+            <longLong>1</longLong>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="1">
+          <widget class="QKeySequenceEdit" name="moveDownSmallKey">
+           <property name="maximumSequenceLength">
+            <longLong>1</longLong>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="2">
+          <widget class="QKeySequenceEdit" name="moveDownLargeKey">
+           <property name="maximumSequenceLength">
+            <longLong>1</longLong>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="1">
+          <widget class="QKeySequenceEdit" name="moveLeftSmallKey">
+           <property name="maximumSequenceLength">
+            <longLong>1</longLong>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="2">
+          <widget class="QKeySequenceEdit" name="moveLeftLargeKey">
+           <property name="maximumSequenceLength">
+            <longLong>1</longLong>
+           </property>
+          </widget>
+         </item>
+         <item row="8" column="1">
+          <widget class="QKeySequenceEdit" name="moveRightSmallKey">
+           <property name="maximumSequenceLength">
+            <longLong>1</longLong>
+           </property>
+          </widget>
+         </item>
+         <item row="8" column="2">
+          <widget class="QKeySequenceEdit" name="moveRightLargeKey">
+           <property name="maximumSequenceLength">
+            <longLong>1</longLong>
+           </property>
+          </widget>
+         </item>
+         <item row="9" column="1">
+          <widget class="QKeySequenceEdit" name="rotateClockSmallKey">
+           <property name="maximumSequenceLength">
+            <longLong>1</longLong>
+           </property>
+          </widget>
+         </item>
+         <item row="9" column="2">
+          <widget class="QKeySequenceEdit" name="rotateClockLargeKey">
+           <property name="maximumSequenceLength">
+            <longLong>1</longLong>
+           </property>
+          </widget>
+         </item>
+         <item row="10" column="1">
+          <widget class="QKeySequenceEdit" name="rotateAntiClockSmallKey">
+           <property name="maximumSequenceLength">
+            <longLong>1</longLong>
+           </property>
+          </widget>
+         </item>
+         <item row="10" column="2">
+          <widget class="QKeySequenceEdit" name="rotateAntiClockLargeKey">
+           <property name="maximumSequenceLength">
+            <longLong>1</longLong>
+           </property>
+          </widget>
+         </item>
+         <item row="11" column="1">
+          <widget class="QKeySequenceEdit" name="scaleUpSmallKey">
+           <property name="maximumSequenceLength">
+            <longLong>1</longLong>
+           </property>
+          </widget>
+         </item>
+         <item row="11" column="2">
+          <widget class="QKeySequenceEdit" name="scaleUpLargeKey">
+           <property name="maximumSequenceLength">
+            <longLong>1</longLong>
+           </property>
+          </widget>
+         </item>
+         <item row="12" column="1">
+          <widget class="QKeySequenceEdit" name="scaleDownSmallKey">
+           <property name="maximumSequenceLength">
+            <longLong>1</longLong>
+           </property>
+          </widget>
+         </item>
+         <item row="12" column="2">
+          <widget class="QKeySequenceEdit" name="scaleDownLargeKey">
+           <property name="maximumSequenceLength">
+            <longLong>1</longLong>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Save</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>AppSettingsDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>AppSettingsDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
