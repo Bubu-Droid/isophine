@@ -32,3 +32,8 @@ SelectLayoutFileDialog::SelectLayoutFileDialog(
   this->setViewMode(QFileDialog::Detail);
   this->setAcceptMode(QFileDialog::AcceptOpen);
 }
+
+SelectGridlineColor::SelectGridlineColor(QWidget* parent) :
+    QColorDialog(parent) {
+  this->setWindowTitle("Select Gridline Color");
+}

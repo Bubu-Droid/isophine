@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QColorDialog>
 #include <QFileDialog>
 #include <QStandardPaths>
 
@@ -37,4 +38,12 @@ public:
       QString setDirPath =
           QStandardPaths::writableLocation(QStandardPaths::HomeLocation)
   );
+};
+
+class SelectGridlineColor: public QColorDialog {
+  Q_OBJECT
+
+public:
+  SelectGridlineColor() = delete;
+  explicit SelectGridlineColor(QWidget* parent = nullptr);
 };
