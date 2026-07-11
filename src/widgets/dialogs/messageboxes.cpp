@@ -7,10 +7,9 @@ DBCorruptMsgBox::DBCorruptMsgBox(
     QMessageBox(parent) {
   this->setDefaultButton(QMessageBox::NoButton);
   this->setWindowTitle(tr("Database Corrupted"));
-  this->setText(tr("The projects list database structure is malformed!"));
-  this->setInformativeText(
-      tr("Manual intervention needed, cannot run application.")
-  );
+  this->setText(tr(
+      "The projects list database structure is malformed! Manual intervention needed, cannot run application."
+  ));
   this->setDetailedText(
       tr("Please open an issue on GitHub with the content of the projects list database file.\n\n"
          "The file is present at the following path:\n"
@@ -65,4 +64,57 @@ DeleteConfirmationMsgBox::DeleteConfirmationMsgBox(QWidget* parent) :
   );
   this->setStandardButtons(QMessageBox::Yes | QMessageBox::No);
   this->setIcon(QMessageBox::Warning);
+}
+
+ProjectSettingsDoNotMatch::ProjectSettingsDoNotMatch(QWidget* parent) :
+    QMessageBox(parent) {
+  this->setDefaultButton(QMessageBox::NoButton);
+  this->setWindowTitle(tr("Project Settings Mismatch"));
+  this->setText(tr(
+      "The page count of the PDF document does not match the page count inside the layout file."
+  ));
+  this->setIcon(QMessageBox::Critical);
+}
+
+LayoutWriteFailed::LayoutWriteFailed(QWidget* parent) : QMessageBox(parent) {
+  this->setDefaultButton(QMessageBox::NoButton);
+  this->setWindowTitle(tr("Failed to Write to Layout File"));
+  this->setText(tr(
+      "Permission to write to layout file not granted, manual intervention needed."
+  ));
+  this->setInformativeText(
+      "Please ensure that the layout file resides in a writable location."
+  );
+  this->setIcon(QMessageBox::Critical);
+}
+
+LayoutReadFailed::LayoutReadFailed(QWidget* parent) : QMessageBox(parent) {
+  this->setDefaultButton(QMessageBox::NoButton);
+  this->setWindowTitle(tr("Failed to Read Layout File"));
+  this->setText(tr(
+      "Permission to read layout file not granted, manual intervention needed."
+  ));
+  this->setInformativeText(
+      "Please ensure that the layout file has read permission."
+  );
+  this->setIcon(QMessageBox::Critical);
+}
+
+LayoutCorruptMsgBox::LayoutCorruptMsgBox(
+    QWidget* parent,
+    const QString& layoutFilePath
+) :
+    QMessageBox(parent) {
+  this->setDefaultButton(QMessageBox::NoButton);
+  this->setWindowTitle(tr("Layout Malformed"));
+  this->setText(tr(
+      "The layout file structure is malformed! Manual intervention needed, cannot launch editor."
+  ));
+  this->setDetailedText(
+      tr("Please open an issue on GitHub with the content of the layout file.\n\n"
+         "The file is present at the following path:\n"
+         "%1")
+          .arg(layoutFilePath)
+  );
+  this->setIcon(QMessageBox::Critical);
 }
