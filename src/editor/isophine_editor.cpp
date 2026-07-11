@@ -18,7 +18,7 @@ IsophineEditor::~IsophineEditor() {
 }
 
 void IsophineEditor::on_actionQuit_triggered() {
-  close();
+  emit quitApp();
 }
 
 void IsophineEditor::on_actionToggleInspector_triggered(bool checked) {

@@ -45,6 +45,9 @@ private slots:
 
   void on_pageViewWidget_pageTransformChanged();
 
+signals:
+  void quitApp();
+
 private:
   Ui::IsophineEditor* ui;
 };
