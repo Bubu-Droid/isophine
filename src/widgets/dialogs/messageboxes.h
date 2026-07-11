@@ -82,3 +82,11 @@ public:
       const QString& layoutFilePath = ""
   );
 };
+
+class PDFMissing: public QMessageBox {
+  Q_OBJECT
+
+public:
+  PDFMissing() = delete;
+  explicit PDFMissing(QWidget* parent = nullptr);
+};

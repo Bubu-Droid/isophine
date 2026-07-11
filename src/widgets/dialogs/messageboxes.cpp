@@ -118,3 +118,12 @@ LayoutCorruptMsgBox::LayoutCorruptMsgBox(
   );
   this->setIcon(QMessageBox::Critical);
 }
+
+PDFMissing::PDFMissing(QWidget* parent) : QMessageBox(parent) {
+  this->setDefaultButton(QMessageBox::NoButton);
+  this->setWindowTitle(tr("PDF Missing"));
+  this->setText(tr(
+      "The PDF is not present at the path provided. Please update the project settings by re-selecting the PDF."
+  ));
+  this->setIcon(QMessageBox::Critical);
+}
