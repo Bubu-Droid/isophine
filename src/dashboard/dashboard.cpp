@@ -15,7 +15,6 @@
 #include <cstdlib>
 
 #include "appsettingsdialog.h"
-#include "buttondialogs.h"
 #include "messageboxes.h"
 #include "newprojectdialog.h"
 #include "openprojectdialog.h"
@@ -166,6 +165,12 @@ void Dashboard::openProject(const ProjectData& projDat) {
   }
   QFile layoutFile = QFile(projDat.layoutPath);
 
+  if (!QFile(projDat.pdfPath).exists()) {
+    PDFMissing msgBox = PDFMissing(this);
+    msgBox.exec();
+    return;
+  }
+
   if (!layoutFile.exists()) {
     if (!layoutFile.open(QIODeviceBase::WriteOnly)) {
       LayoutWriteFailed msgBox = LayoutWriteFailed(this);
@@ -209,19 +214,16 @@ void Dashboard::openProject(const ProjectData& projDat) {
     return;
   }
 
-  OpenPDFProgress dialog = OpenPDFProgress(this);
   if (!layoutFile.open(QIODeviceBase::ReadOnly)) {
     return;
   }
   layoutJsonObj = QJsonDocument::fromJson(layoutFile.readAll()).object();
   layoutFile.close();
 
+  // TODO: add a status message here
   QPdfDocument*& pdfDocument = ProjectSettings::instance().pdfDocument;
   pdfDocument = new QPdfDocument(this);
   pdfDocument->load(projDat.pdfPath);
-
-  dialog.setValue(80);
-  dialog.setLabelText("Checking if project and layout settings match...");
 
   if (layoutJsonObj.value("current_page_no").toInt() == -1) {
     QJsonArray transformArray;
@@ -233,7 +235,6 @@ void Dashboard::openProject(const ProjectData& projDat) {
     pageTransform["page_bg_color"] = QColor(255, 255, 255).name();
     for (int i = 0; i < pdfDocument->pageCount(); ++i) {
       transformArray.append(pageTransform);
-      dialog.setValue(80 + 19 * (i / pdfDocument->pageCount()));
     }
 
     layoutJsonObj["current_page_no"] = 0;
@@ -271,8 +272,6 @@ void Dashboard::openProject(const ProjectData& projDat) {
   ProjectSettings::instance().pageTransformVector.resize(
       pdfDocument->pageCount()
   );
-
-  dialog.setValue(dialog.maximum());
 
   emit openProjectToRoot(projDat);
 }
