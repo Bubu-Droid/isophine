@@ -1,11 +1,7 @@
 #pragma once
 
-#include <qkeysequence.h>
-#include <qnamespace.h>
-#include <qobject.h>
-
+#include <QColor>
 #include <QKeySequence>
-#include <QPalette>
 #include <QPdfDocument>
 #include <QString>
 #include <vector>
@@ -19,10 +15,11 @@ inline constexpr qreal MIN_ZOOM = 0.25;
 inline constexpr qreal MAX_ZOOM = 5;
 
 struct PageTransform {
-  qreal xOffset = 0;
-  qreal yOffset = 0;
-  qreal rotationAmount = 0;
+  qreal xOffset = 0.0;
+  qreal yOffset = 0.0;
+  qreal rotationAmount = 0.0;
   qreal scaleAmount = 1.0;
+  QColor pageBgColor = QColor(255, 255, 255);
 };
 
 class ProjectSettings {
@@ -36,18 +33,17 @@ public:
   }
 
   QPdfDocument* pdfDocument = nullptr;
-  QString pdfPath =
-      "/home/bubu/Desktop/college/num-ana/sem-2/bose-gupta-na-2.pdf";
-  // QString pdfPath = "/home/bubu/Tests/latex-tests-2/main.pdf";
+  QString projectOutDir;
+  QString layoutPath;
+  QString projectName;
 
   qreal boundBoxScale = 1.0;
-  qreal boundBoxHeight = 1122.67;
-  qreal boundBoxWidth = 793.33;
-  QColor boundBoxLineColor = QPalette::Accent;
+  qreal boundBoxHeight;
+  qreal boundBoxWidth;
+  QColor boundBoxLineColor = QColor(255, 96, 208);
   int boundBoxHorLinesCount = 5;
   int boundBoxVerLinesCount = 3;
-  // NOTE: this is not added into the settings
-  int currentPageNo = 0;
+  int currentPageNo;
   qreal zoomCanvasAmount = 0.25;
 
   qreal moveSmallAmount = 1.0;

@@ -13,18 +13,8 @@ PageViewer::PageViewer(QWidget* parent) :
     m_pageCount(0),
     m_ppiX(QGuiApplication::primaryScreen()->physicalDotsPerInchX()),
     m_ppiY(QGuiApplication::primaryScreen()->physicalDotsPerInchY()) {
-  ProjectSettings::instance().pdfDocument = new QPdfDocument(this);
-
-  ProjectSettings::instance().boundBoxHeight = 842 * (m_ppiX / 72.0);
-  ProjectSettings::instance().boundBoxWidth = 595 * (m_ppiY / 72.0);
-
   QPdfDocument*& pdfDocument = ProjectSettings::instance().pdfDocument;
-  pdfDocument->load(ProjectSettings::instance().pdfPath);
   m_pageCount = pdfDocument->pageCount();
-
-  ProjectSettings::instance().pageTransformVector.resize(
-      pdfDocument->pageCount()
-  );
 
   loadPage();
 }
@@ -111,7 +101,7 @@ void PageViewer::keyPressEvent(QKeyEvent* event) {
     // Well, I'm too lazy to fix this rn, will fix this sometime later.
     if (keySequence == nextKey) {
       if (currentPageNo < m_pageCount - 1) {
-        currentPageNo++;
+        ++currentPageNo;
         loadPage();
         update();
         emit pageTransformChanged();
@@ -119,7 +109,7 @@ void PageViewer::keyPressEvent(QKeyEvent* event) {
       return;
     } else if (keySequence == prevKey) {
       if (currentPageNo > 0) {
-        currentPageNo--;
+        --currentPageNo;
         loadPage();
         update();
         emit pageTransformChanged();
