@@ -39,6 +39,10 @@ private slots:
   void on_actionOpen_Existing_Project_triggered();
   void on_actionEdit_App_Settings_triggered();
 
+signals:
+  void openProjectToRoot(const ProjectData& projDat);
+  void quitApp();
+
 private:
   Ui::Dashboard* ui;
   void validateDB();

@@ -4,16 +4,22 @@
 
 #include <QByteArray>
 #include <QDir>
+#include <QGuiApplication>
 #include <QIODeviceBase>
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QPdfDocument>
+#include <QScreen>
 #include <QStandardPaths>
 #include <cstdlib>
 
 #include "appsettingsdialog.h"
+#include "buttondialogs.h"
 #include "messageboxes.h"
 #include "newprojectdialog.h"
 #include "openprojectdialog.h"
+#include "project_settings.h"
 #include "projectcard.h"
 #include "ui_dashboard.h"
 
@@ -35,7 +41,7 @@ Dashboard::~Dashboard() {
 }
 
 void Dashboard::on_actionQuit_triggered() {
-  close();
+  emit quitApp();
 }
 
 void Dashboard::on_actionNew_Project_triggered() {
@@ -89,7 +95,7 @@ void Dashboard::loadProjects() {
     delete item;
   }
 
-  for (auto it = fileJsonObj.begin(); it != fileJsonObj.end(); it++) {
+  for (auto it = fileJsonObj.begin(); it != fileJsonObj.end(); ++it) {
     QJsonObject content = it.value().toObject();
     ProjectData projDat;
     projDat.projectName = content["project_name"].toString();
@@ -101,7 +107,12 @@ void Dashboard::loadProjects() {
     projDat.isExisting = content["is_existing"].toBool();
 
     ProjectCard* card = new ProjectCard(this, projDat);
-    connect(card, &ProjectCard::openProject, this, &Dashboard::openProject);
+    connect(
+        card,
+        &ProjectCard::openProjectToDash,
+        this,
+        &Dashboard::openProject
+    );
     connect(card, &ProjectCard::editProject, this, &Dashboard::editProject);
     connect(card, &ProjectCard::deleteProject, this, &Dashboard::deleteProject);
     ui->verticalLayout->addWidget(card);
@@ -118,7 +129,7 @@ void Dashboard::saveProject(const ProjectData& projDat) {
       QJsonDocument::fromJson(m_projectsListFile.readAll()).object();
   m_projectsListFile.close();
 
-  for (auto it = fileJsonObj.begin(); it != fileJsonObj.end(); it++) {
+  for (auto it = fileJsonObj.begin(); it != fileJsonObj.end(); ++it) {
     if (it.value().toObject()["project_name"] == projDat.projectName) {
       SameProjectNameMsgBox msgBox = SameProjectNameMsgBox(this);
       msgBox.exec();
@@ -149,7 +160,121 @@ void Dashboard::saveProject(const ProjectData& projDat) {
 }
 
 void Dashboard::openProject(const ProjectData& projDat) {
-  qDebug() << "open button clicked";
+  QDir dir;
+  if (!dir.exists(projDat.projOutDir)) {
+    dir.mkpath(projDat.projOutDir);
+  }
+  QFile layoutFile = QFile(projDat.layoutPath);
+
+  if (!layoutFile.exists()) {
+    if (!layoutFile.open(QIODeviceBase::WriteOnly)) {
+      LayoutWriteFailed msgBox = LayoutWriteFailed(this);
+      msgBox.exec();
+      return;
+    }
+
+    QJsonObject content;
+    content["current_page_no"] = -1;
+    content["transform_array"] = QJsonArray();
+    layoutFile.write(QJsonDocument(content).toJson());
+    layoutFile.close();
+  }
+
+  if (!layoutFile.open(QIODeviceBase::ReadOnly)) {
+    LayoutReadFailed msgBox = LayoutReadFailed(this);
+    msgBox.exec();
+    return;
+  }
+  QJsonDocument layoutJsonDoc = QJsonDocument::fromJson(layoutFile.readAll());
+  layoutFile.close();
+
+  if (!layoutJsonDoc.isObject()) {
+    LayoutCorruptMsgBox msgBox = LayoutCorruptMsgBox(this, projDat.layoutPath);
+    msgBox.exec();
+    return;
+  }
+
+  QJsonObject layoutJsonObj = layoutJsonDoc.object();
+  if (layoutJsonObj.count() != 2 || !layoutJsonObj.contains("current_page_no")
+      || !layoutJsonObj.contains("transform_array")) {
+    LayoutCorruptMsgBox msgBox = LayoutCorruptMsgBox(this);
+    msgBox.exec();
+    return;
+  }
+
+  if (!layoutJsonObj.value("current_page_no").isDouble()
+      || !layoutJsonObj.value("transform_array").isArray()) {
+    LayoutCorruptMsgBox msgBox = LayoutCorruptMsgBox(this);
+    msgBox.exec();
+    return;
+  }
+
+  OpenPDFProgress dialog = OpenPDFProgress(this);
+  if (!layoutFile.open(QIODeviceBase::ReadOnly)) {
+    return;
+  }
+  layoutJsonObj = QJsonDocument::fromJson(layoutFile.readAll()).object();
+  layoutFile.close();
+
+  QPdfDocument*& pdfDocument = ProjectSettings::instance().pdfDocument;
+  pdfDocument = new QPdfDocument(this);
+  pdfDocument->load(projDat.pdfPath);
+
+  dialog.setValue(80);
+  dialog.setLabelText("Checking if project and layout settings match...");
+
+  if (layoutJsonObj.value("current_page_no").toInt() == -1) {
+    QJsonArray transformArray;
+    QJsonObject pageTransform;
+    pageTransform["x_offset"] = 0.0;
+    pageTransform["y_offset"] = 0.0;
+    pageTransform["rotation_amount"] = 0.0;
+    pageTransform["scale_amount"] = 1.0;
+    pageTransform["page_bg_color"] = QColor(255, 255, 255).name();
+    for (int i = 0; i < pdfDocument->pageCount(); ++i) {
+      transformArray.append(pageTransform);
+      dialog.setValue(80 + 19 * (i / pdfDocument->pageCount()));
+    }
+
+    layoutJsonObj["current_page_no"] = 0;
+    layoutJsonObj["transform_array"] = transformArray;
+
+    if (!layoutFile.open(QIODeviceBase::WriteOnly | QIODeviceBase::Truncate)) {
+      return;
+    }
+    layoutFile.write(QJsonDocument(layoutJsonObj).toJson());
+    layoutFile.close();
+  }
+
+  if (layoutJsonObj.value("transform_array").toArray().count()
+      != pdfDocument->pageCount()) {
+    ProjectSettingsDoNotMatch msgBox = ProjectSettingsDoNotMatch(this);
+    msgBox.exec();
+    return;
+  }
+
+  if (!layoutFile.open(QIODeviceBase::ReadOnly)) {
+    return;
+  }
+  layoutJsonObj = QJsonDocument::fromJson(layoutFile.readAll()).object();
+  ProjectSettings::instance().currentPageNo =
+      layoutJsonObj["current_page_no"].toInt();
+  layoutFile.close();
+
+  ProjectSettings::instance().projectName = projDat.projectName;
+  ProjectSettings::instance().layoutPath = projDat.layoutPath;
+  ProjectSettings::instance().projectOutDir = projDat.projOutDir;
+  ProjectSettings::instance().boundBoxHeight = projDat.boundBoxHeight
+      * (QGuiApplication::primaryScreen()->physicalDotsPerInchX() / 72.0);
+  ProjectSettings::instance().boundBoxWidth = projDat.boundBoxWidth
+      * (QGuiApplication::primaryScreen()->physicalDotsPerInchY() / 72.0);
+  ProjectSettings::instance().pageTransformVector.resize(
+      pdfDocument->pageCount()
+  );
+
+  dialog.setValue(dialog.maximum());
+
+  emit openProjectToRoot(projDat);
 }
 
 void Dashboard::editProject(
@@ -173,7 +298,7 @@ void Dashboard::editProject(
   content["bound_box_width"] = projDat.boundBoxWidth;
   content["is_existing"] = projDat.isExisting;
 
-  for (auto it = fileJsonObj.begin(); it != fileJsonObj.end(); it++) {
+  for (auto it = fileJsonObj.begin(); it != fileJsonObj.end(); ++it) {
     if (it.value().toObject()["project_name"] == oldProjName) {
       oldProjKey = it.key();
       break;
@@ -207,7 +332,7 @@ void Dashboard::deleteProject(const QString& projName) {
 
   QString projKey;
 
-  for (auto it = fileJsonObj.begin(); it != fileJsonObj.end(); it++) {
+  for (auto it = fileJsonObj.begin(); it != fileJsonObj.end(); ++it) {
     if (it.value().toObject()["project_name"] == projName) {
       projKey = it.key();
       break;
@@ -266,7 +391,7 @@ void Dashboard::validateDB() {
   QJsonObject fileJsonParentObj = fileJsonDoc.object();
 
   for (auto it = fileJsonParentObj.begin(); it != fileJsonParentObj.end();
-       it++) {
+       ++it) {
     if (!it.value().isObject()) {
       DBCorruptMsgBox msgBox = DBCorruptMsgBox(this, m_projectsListFilePath);
       msgBox.exec();
