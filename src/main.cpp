@@ -7,6 +7,7 @@
 
 #include "dashboard.h"
 #include "isophine_editor.h"
+#include "project_settings.h"
 
 void validateConfig(QSettings& settings);
 void createConfigIfNeeded(QSettings& settings);
@@ -32,6 +33,11 @@ int main(int argc, char* argv[]) {
       dashWindow,
       &Dashboard::openProjectToRoot,
       [&](const ProjectData& projDat) {
+        editWindow->setPageCount(
+            ProjectSettings::instance().pdfDocument->pageCount()
+        );
+        editWindow->loadThumbnails();
+        editWindow->loadPage();
         rootContainer.setCurrentWidget(editWindow);
       }
   );

@@ -12,11 +12,12 @@ PageViewer::PageViewer(QWidget* parent) :
     QWidget(parent),
     m_pageCount(0),
     m_ppiX(QGuiApplication::primaryScreen()->physicalDotsPerInchX()),
-    m_ppiY(QGuiApplication::primaryScreen()->physicalDotsPerInchY()) {
-  QPdfDocument*& pdfDocument = ProjectSettings::instance().pdfDocument;
-  m_pageCount = pdfDocument->pageCount();
+    m_ppiY(QGuiApplication::primaryScreen()->physicalDotsPerInchY()) {}
 
-  loadPage();
+void PageViewer::setPageCount(int pageCount) {
+  if (m_pageCount != pageCount) {
+    m_pageCount = pageCount;
+  }
 }
 
 void PageViewer::loadPage() {

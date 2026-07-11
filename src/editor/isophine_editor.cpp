@@ -8,13 +8,23 @@ IsophineEditor::IsophineEditor(QWidget* parent) :
     QMainWindow(parent),
     ui(new Ui::IsophineEditor) {
   ui->setupUi(this);
-
-  QPdfDocument*& pdfDocument = ProjectSettings::instance().pdfDocument;
-  ui->thumbnailView->setModel(pdfDocument->pageModel());
 }
 
 IsophineEditor::~IsophineEditor() {
   delete ui;
+}
+
+void IsophineEditor::loadPage() {
+  ui->pageViewWidget->loadPage();
+}
+
+void IsophineEditor::setPageCount(int pageCount) {
+  ui->pageViewWidget->setPageCount(pageCount);
+}
+
+void IsophineEditor::loadThumbnails() {
+  QPdfDocument*& pdfDocument = ProjectSettings::instance().pdfDocument;
+  ui->thumbnailView->setModel(pdfDocument->pageModel());
 }
 
 void IsophineEditor::on_actionQuit_triggered() {

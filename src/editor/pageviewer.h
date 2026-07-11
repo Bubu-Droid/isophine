@@ -11,6 +11,7 @@ class PageViewer: public QWidget {
 public:
   explicit PageViewer(QWidget* parent = nullptr);
   void loadPage();
+  void setPageCount(int pageCount);
 
 signals:
   void pageTransformChanged();

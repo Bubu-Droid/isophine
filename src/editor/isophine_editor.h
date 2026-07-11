@@ -50,4 +50,9 @@ signals:
 
 private:
   Ui::IsophineEditor* ui;
+
+public:
+  void setPageCount(int pageCount);
+  void loadThumbnails();
+  void loadPage();
 };
