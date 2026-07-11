@@ -11,7 +11,8 @@
 #include "projsettingsdialog.h"
 
 void ProjectCard::on_openPushButton_clicked() {
-  emit openProject({});
+  ProjectData& projDat = m_projDat;
+  emit openProjectToDash(projDat);
 }
 
 void ProjectCard::on_settingsPushButton_clicked() {

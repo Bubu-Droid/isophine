@@ -21,7 +21,7 @@ private slots:
   void on_deletePushButton_clicked();
 
 signals:
-  void openProject(const ProjectData& projDat);
+  void openProjectToDash(const ProjectData& projDat);
   void editProject(const QString& oldProjName, const ProjectData& projDat);
   void deleteProject(const QString& projName);
 
