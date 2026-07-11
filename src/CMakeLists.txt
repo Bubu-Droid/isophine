@@ -18,6 +18,6 @@ target_include_directories(isophine
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-# add_subdirectory(editor)
+add_subdirectory(editor)
 add_subdirectory(widgets)
 add_subdirectory(dashboard)
