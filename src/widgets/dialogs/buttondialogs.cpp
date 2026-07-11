@@ -39,12 +39,3 @@ SelectGridlineColor::SelectGridlineColor(QWidget* parent) :
     QColorDialog(parent) {
   this->setWindowTitle("Select Gridline Color");
 }
-
-OpenPDFProgress::OpenPDFProgress(QWidget* parent) : QProgressDialog(parent) {
-  this->setWindowTitle("Opening Project");
-  this->setMinimum(0);
-  this->setMaximum(100);
-  this->setCancelButton(nullptr);
-  this->setLabelText("Loading PDF...");
-  this->setWindowModality(Qt::WindowModal);
-}

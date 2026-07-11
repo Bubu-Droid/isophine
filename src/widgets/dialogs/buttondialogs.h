@@ -2,7 +2,6 @@
 
 #include <QColorDialog>
 #include <QFileDialog>
-#include <QProgressDialog>
 #include <QStandardPaths>
 
 class SelectPDFDialog: public QFileDialog {
@@ -47,12 +46,4 @@ class SelectGridlineColor: public QColorDialog {
 public:
   SelectGridlineColor() = delete;
   explicit SelectGridlineColor(QWidget* parent = nullptr);
-};
-
-class OpenPDFProgress: public QProgressDialog {
-  Q_OBJECT
-
-public:
-  OpenPDFProgress() = delete;
-  explicit OpenPDFProgress(QWidget* parent = nullptr);
 };
