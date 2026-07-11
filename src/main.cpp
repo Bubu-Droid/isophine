@@ -1,8 +1,9 @@
 #include <sysexits.h>
 
 #include <QApplication>
-#include <QFile>
+#include <QColor>
 #include <QSettings>
+#include <QStackedWidget>
 
 #include "dashboard.h"
 #include "isophine_editor.h"
@@ -21,10 +22,39 @@ int main(int argc, char* argv[]) {
   validateConfig(settings);
 
   QApplication app(argc, argv);
-  Dashboard window;
-  window.show();
-  // IsophineEditor w;
-  // w.show();
+
+  QStackedWidget rootContainer;
+
+  Dashboard* dashWindow = new Dashboard(&rootContainer);
+  IsophineEditor* editWindow = new IsophineEditor(&rootContainer);
+
+  QObject::connect(
+      dashWindow,
+      &Dashboard::openProjectToRoot,
+      [&](const ProjectData& projDat) {
+        rootContainer.setCurrentWidget(editWindow);
+      }
+  );
+  QObject::connect(dashWindow, &Dashboard::quitApp, &app, &QApplication::quit);
+  QObject::connect(
+      editWindow,
+      &IsophineEditor::quitApp,
+      &app,
+      &QApplication::quit
+  );
+
+  dashWindow->setWindowFlags(Qt::Widget);
+  editWindow->setWindowFlags(Qt::Widget);
+
+  rootContainer.addWidget(dashWindow);
+  rootContainer.addWidget(editWindow);
+
+  rootContainer.setCurrentWidget(dashWindow);
+
+  // TODO: put the default dimensions after trialing
+  // rootContainer.resize();
+  rootContainer.show();
+
   return QApplication::exec();
 }
 
