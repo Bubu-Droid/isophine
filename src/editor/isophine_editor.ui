@@ -43,7 +43,6 @@
     <addaction name="actionHome"/>
     <addaction name="separator"/>
     <addaction name="actionSave"/>
-    <addaction name="actionSaveAs"/>
     <addaction name="actionExport"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
@@ -292,17 +291,6 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::MenuRole::NoRole</enum>
-   </property>
-  </action>
-  <action name="actionSaveAs">
-   <property name="text">
-    <string>Save Layout As</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+Shift+S</string>
    </property>
    <property name="menuRole">
     <enum>QAction::MenuRole::NoRole</enum>
