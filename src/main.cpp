@@ -4,6 +4,7 @@
 #include <QColor>
 #include <QSettings>
 #include <QStackedWidget>
+#include <QStatusBar>
 
 #include "dashboard.h"
 #include "isophine_editor.h"
@@ -38,9 +39,13 @@ int main(int argc, char* argv[]) {
         );
         editWindow->loadThumbnails();
         editWindow->loadPage();
+        dashWindow->statusBar()->clearMessage();
         rootContainer.setCurrentWidget(editWindow);
       }
   );
+  QObject::connect(editWindow, &IsophineEditor::goToHome, [&]() {
+    rootContainer.setCurrentWidget(dashWindow);
+  });
   QObject::connect(dashWindow, &Dashboard::quitApp, &app, &QApplication::quit);
   QObject::connect(
       editWindow,
