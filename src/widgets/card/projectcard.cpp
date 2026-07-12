@@ -82,7 +82,7 @@ ProjectCard::ProjectCard(QWidget* parent, const ProjectData& projDat) :
   verticalLayout_2->addWidget(projectNameLabel);
 
   QSpacerItem* verticalSpacer =
-      new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+      new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
   verticalLayout_2->addItem(verticalSpacer);
 
   pdfPathLabel = new QLabel(
