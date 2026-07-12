@@ -1,5 +1,6 @@
 #include "projectcard.h"
 
+#include <QDir>
 #include <QHBoxLayout>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -53,6 +54,27 @@ ProjectCard::ProjectCard(QWidget* parent, const ProjectData& projDat) :
   thumbSizePolicy.setHorizontalStretch(0);
   thumbSizePolicy.setVerticalStretch(0);
   thumbnailPreviewWidget->setSizePolicy(thumbSizePolicy);
+
+  QVBoxLayout* thumbLayout = new QVBoxLayout(thumbnailPreviewWidget);
+  thumbLayout->setContentsMargins(0, 0, 0, 0);
+
+  QLabel* imageLabel = new QLabel(thumbnailPreviewWidget);
+  imageLabel->setAlignment(Qt::AlignCenter);
+
+  QPixmap imagePixmap;
+
+  if (QFile(QDir(m_projDat.projOutDir).filePath("thumbnail.png")).exists()) {
+    imagePixmap = QPixmap(QDir(m_projDat.projOutDir).filePath("thumbnail.png"));
+  } else {
+    imagePixmap = QPixmap("/home/bubu/latex-works/latex-showcase/media/1.png");
+  }
+
+  QPixmap scaledPixmap =
+      imagePixmap
+          .scaled(100, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
+  imageLabel->setPixmap(scaledPixmap);
+  thumbLayout->addWidget(imageLabel);
 
   horizontalLayout->addWidget(thumbnailPreviewWidget);
 
