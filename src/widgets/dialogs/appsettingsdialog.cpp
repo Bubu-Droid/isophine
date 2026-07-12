@@ -34,10 +34,6 @@ AppSettingsDialog::AppSettingsDialog(QWidget* parent) :
   );
 
   ui->boxScaleSpinBox->setValue(settings.value("BoundingBox/Scale").toDouble());
-  ui->boxHeightSpinBox->setValue(
-      settings.value("BoundingBox/Height").toDouble()
-  );
-  ui->boxWidthSpinBox->setValue(settings.value("BoundingBox/Width").toDouble());
   m_gridLineColor = settings.value("BoundingBox/LineColor").value<QColor>();
   ui->colorPushButton->setText(m_gridLineColor.name());
   // the brainrot is really getting to me, ngl
@@ -161,8 +157,6 @@ void AppSettingsDialog::updateSettings() {
   settings.beginGroup("BoundingBox");
   {
     settings.setValue("Scale", ui->boxScaleSpinBox->value());
-    settings.setValue("Height", ui->boxHeightSpinBox->value());
-    settings.setValue("Width", ui->boxWidthSpinBox->value());
     settings.setValue("LineColor", m_gridLineColor);
     settings.setValue("HorizontalLinesCount", ui->horLinesSpinBox->value());
     settings.setValue("VerticalLinesCount", ui->verLinesSpinBox->value());
