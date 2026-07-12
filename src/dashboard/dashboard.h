@@ -18,7 +18,6 @@ struct ProjectData {
   QString projOutDir;
   qreal boundBoxHeight = 1.0;
   qreal boundBoxWidth = 1.0;
-  bool isExisting = false;
 };
 
 class Dashboard: public QMainWindow {
@@ -46,7 +45,9 @@ signals:
 private:
   Ui::Dashboard* ui;
   void validateDB();
+  bool validateProjectLayout(const ProjectData& projDat);
   QString m_saveDirPath;
   QString m_projectsListFileName;
   QFile m_projectsListFile;
+  QFile m_layoutFile;
 };
