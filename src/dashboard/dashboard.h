@@ -28,7 +28,6 @@ public:
   ~Dashboard() override;
 
 private slots:
-  void loadProjects();
   void saveProject(const ProjectData& projDat);
   void openProject(const ProjectData& projDat);
   void editProject(const QString& oldProjName, const ProjectData& projDat);
@@ -37,6 +36,9 @@ private slots:
   void on_actionNew_Project_triggered();
   void on_actionOpen_Existing_Project_triggered();
   void on_actionEdit_App_Settings_triggered();
+
+public slots:
+  void loadProjects();
 
 signals:
   void openProjectToRoot(const ProjectData& projDat);

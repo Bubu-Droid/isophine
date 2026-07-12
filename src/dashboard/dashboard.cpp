@@ -10,6 +10,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QPainter>
 #include <QPdfDocument>
 #include <QScreen>
 #include <QStandardPaths>
@@ -177,13 +178,6 @@ void Dashboard::openProject(const ProjectData& projDat) {
     return;
   }
 
-  // if (!m_projectsListFile.open(QIODeviceBase::ReadOnly)) {
-  //   return;
-  // }
-  // QJsonObject fileJsonObj =
-  //     QJsonDocument::fromJson(m_projectsListFile.readAll()).object();
-  // m_projectsListFile.close();
-
   if (!m_layoutFile.open(QIODeviceBase::ReadOnly)) {
     return;
   }
@@ -191,17 +185,6 @@ void Dashboard::openProject(const ProjectData& projDat) {
       QJsonDocument::fromJson(m_layoutFile.readAll()).object();
   m_layoutFile.close();
 
-  // QString projKey;
-  // for (auto it = fileJsonObj.constBegin(); it != fileJsonObj.constEnd(); ++it) {
-  //   if (it.value().toObject()["project_name"] == projDat.projectName) {
-  //     projKey = it.key();
-  //     break;
-  //   }
-  // }
-  // layoutJsonObj["bound_box_height"] =
-  //     fileJsonObj[projKey].toObject()["bound_box_height"].toDouble();
-  // layoutJsonObj["bound_box_width"] =
-  //     fileJsonObj[projKey].toObject()["bound_box_width"].toDouble();
   layoutJsonObj["bound_box_height"] = projDat.boundBoxHeight;
   layoutJsonObj["bound_box_width"] = projDat.boundBoxWidth;
 
@@ -243,6 +226,22 @@ void Dashboard::openProject(const ProjectData& projDat) {
         layoutJsonArr[i].toObject()["rotation_amount"].toDouble();
     pageTransformVector[i].scaleAmount =
         layoutJsonArr[i].toObject()["scale_amount"].toDouble();
+  }
+
+  QSizeF pageSize = pdfDocument->pagePointSize(0);
+  int thumbHeight = 150;
+  int thumbWidth = (pageSize.width() / pageSize.height()) * thumbHeight;
+  QSize renderSize(thumbWidth, thumbHeight);
+  QImage thumbImg = pdfDocument->render(0, renderSize);
+  QImage thumbBg(renderSize, QImage::Format_ARGB32_Premultiplied);
+  thumbBg.fill(Qt::white);
+  QPainter painter(&thumbBg);
+  painter.drawImage(0, 0, thumbImg);
+  painter.end();
+  QString thumbPath = QDir(projDat.projOutDir).filePath("thumbnail.png");
+  if (!thumbBg.save(thumbPath, "PNG")) {
+    ThumbSaveFailed msgBox = ThumbSaveFailed(this);
+    msgBox.exec();
   }
 
   emit openProjectToRoot(projDat);
