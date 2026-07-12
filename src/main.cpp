@@ -35,6 +35,12 @@ int main(int argc, char* argv[]) {
   IsophineEditor* editWindow = new IsophineEditor(&rootContainer);
 
   QObject::connect(
+      editWindow,
+      &IsophineEditor::goToHome,
+      dashWindow,
+      &Dashboard::loadProjects
+  );
+  QObject::connect(
       dashWindow,
       &Dashboard::openProjectToRoot,
       [&](const ProjectData& projDat) {
