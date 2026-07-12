@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QFile>
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
@@ -46,13 +47,18 @@ private slots:
   void on_pageViewWidget_pageTransformChanged();
 
   void on_actionHome_triggered();
+  void on_actionSave_triggered();
+  void on_actionEditGlobalSettings_triggered();
 
 signals:
   void quitApp();
   void goToHome();
+  void updateTitle(const QString& title);
+  void refreshSettings();
 
 private:
   Ui::IsophineEditor* ui;
+  QFile m_layoutFile;
 
 public:
   void setPageCount(int pageCount);

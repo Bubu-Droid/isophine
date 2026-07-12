@@ -1,5 +1,11 @@
 #include "isophine_editor.h"
 
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+
+#include "appsettingsdialog.h"
+#include "messageboxes.h"
 #include "pageviewer.h"
 #include "project_settings.h"
 #include "ui_isophine_editor.h"
@@ -28,11 +34,75 @@ void IsophineEditor::loadThumbnails() {
 }
 
 void IsophineEditor::on_actionQuit_triggered() {
+  if (!ProjectSettings::instance().isSaved) {
+    SaveUnsavedChanges msgBox = SaveUnsavedChanges(this);
+    int ret = msgBox.exec();
+    if (ret == QMessageBox::Save) {
+      on_actionSave_triggered();
+    } else if (ret == QMessageBox::Cancel) {
+      return;
+    }
+  }
   emit quitApp();
 }
 
 void IsophineEditor::on_actionHome_triggered() {
+  if (!ProjectSettings::instance().isSaved) {
+    SaveUnsavedChanges msgBox = SaveUnsavedChanges(this);
+    int ret = msgBox.exec();
+    if (ret == QMessageBox::Save) {
+      on_actionSave_triggered();
+    } else if (ret == QMessageBox::Cancel) {
+      return;
+    }
+  }
   emit goToHome();
+}
+
+void IsophineEditor::on_actionEditGlobalSettings_triggered() {
+  AppSettingsDialog dialog = AppSettingsDialog(this);
+  if (dialog.exec() == QDialog::Accepted) {
+    dialog.updateSettings();
+    emit refreshSettings();
+  }
+}
+
+void IsophineEditor::on_actionSave_triggered() {
+  QPdfDocument*& pdfDocument = ProjectSettings::instance().pdfDocument;
+  m_layoutFile.setFileName(ProjectSettings::instance().layoutPath);
+  std::vector<PageTransform>& pageTransformVector =
+      ProjectSettings::instance().pageTransformVector;
+
+  if (!m_layoutFile.open(QIODeviceBase::ReadOnly)) {
+    return;
+  }
+  QJsonObject layoutJsonObj =
+      QJsonDocument::fromJson(m_layoutFile.readAll()).object();
+  m_layoutFile.close();
+
+  QJsonArray transformArray;
+  QJsonObject pageTransform;
+  for (auto it = pageTransformVector.begin(); it != pageTransformVector.end();
+       ++it) {
+    pageTransform["x_offset"] = it->xOffset;
+    pageTransform["y_offset"] = it->yOffset;
+    pageTransform["rotation_amount"] = it->rotationAmount;
+    pageTransform["scale_amount"] = it->scaleAmount;
+    transformArray.append(pageTransform);
+  }
+
+  layoutJsonObj["transform_array"] = transformArray;
+
+  if (!m_layoutFile.open(QIODeviceBase::WriteOnly | QIODeviceBase::Truncate)) {
+    return;
+  }
+  m_layoutFile.write(QJsonDocument(layoutJsonObj).toJson());
+  m_layoutFile.close();
+
+  ui->statusbar->showMessage("Layout Saved.", 2000);
+  ProjectSettings::instance().isSaved = true;
+  emit updateTitle(QString("%1 — Isophine Editor")
+                       .arg(ProjectSettings::instance().projectName));
 }
 
 void IsophineEditor::on_actionToggleInspector_triggered(bool checked) {
@@ -133,6 +203,9 @@ void IsophineEditor::on_pageViewWidget_xOffsetChangedByKey() {
   ui->xOffsetDoubleSpinBox->setValue(
       pageTransformVector[currentPageNo].xOffset
   );
+  ProjectSettings::instance().isSaved = false;
+  emit updateTitle(QString("%1* — Isophine Editor")
+                       .arg(ProjectSettings::instance().projectName));
 }
 
 void IsophineEditor::on_pageViewWidget_yOffsetChangedByKey() {
@@ -143,6 +216,9 @@ void IsophineEditor::on_pageViewWidget_yOffsetChangedByKey() {
   ui->yOffsetDoubleSpinBox->setValue(
       pageTransformVector[currentPageNo].yOffset
   );
+  ProjectSettings::instance().isSaved = false;
+  emit updateTitle(QString("%1* — Isophine Editor")
+                       .arg(ProjectSettings::instance().projectName));
 }
 
 void IsophineEditor::on_pageViewWidget_scaleChangedByKey() {
@@ -153,6 +229,9 @@ void IsophineEditor::on_pageViewWidget_scaleChangedByKey() {
   ui->scaleDoubleSpinBox->setValue(
       pageTransformVector[currentPageNo].scaleAmount
   );
+  ProjectSettings::instance().isSaved = false;
+  emit updateTitle(QString("%1* — Isophine Editor")
+                       .arg(ProjectSettings::instance().projectName));
 }
 
 void IsophineEditor::on_pageViewWidget_rotationChangedByKey() {
@@ -163,6 +242,9 @@ void IsophineEditor::on_pageViewWidget_rotationChangedByKey() {
   ui->rotationDoubleSpinBox->setValue(
       pageTransformVector[currentPageNo].rotationAmount
   );
+  ProjectSettings::instance().isSaved = false;
+  emit updateTitle(QString("%1* — Isophine Editor")
+                       .arg(ProjectSettings::instance().projectName));
 }
 
 void IsophineEditor::on_pageViewWidget_pageTransformChanged() {
@@ -170,4 +252,5 @@ void IsophineEditor::on_pageViewWidget_pageTransformChanged() {
   on_pageViewWidget_yOffsetChangedByKey();
   on_pageViewWidget_scaleChangedByKey();
   on_pageViewWidget_rotationChangedByKey();
+  update();
 }
