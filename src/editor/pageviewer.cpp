@@ -104,7 +104,6 @@ void PageViewer::keyPressEvent(QKeyEvent* event) {
       if (currentPageNo < m_pageCount - 1) {
         ++currentPageNo;
         loadPage();
-        update();
         emit pageTransformChanged();
       }
       return;
@@ -112,7 +111,6 @@ void PageViewer::keyPressEvent(QKeyEvent* event) {
       if (currentPageNo > 0) {
         --currentPageNo;
         loadPage();
-        update();
         emit pageTransformChanged();
       }
       return;
@@ -120,56 +118,48 @@ void PageViewer::keyPressEvent(QKeyEvent* event) {
       if (currentPageTransform.xOffset - moveSmallAmount >= -MAX_OFFSET_MAG) {
         currentPageTransform.xOffset -= moveSmallAmount;
       }
-      update();
       emit xOffsetChangedByKey();
       return;
     } else if (keySequence == leftLargeKey) {
       if (currentPageTransform.xOffset - moveLargeAmount >= -MAX_OFFSET_MAG) {
         currentPageTransform.xOffset -= moveLargeAmount;
       }
-      update();
       emit xOffsetChangedByKey();
       return;
     } else if (keySequence == downSmallKey) {
       if (currentPageTransform.yOffset + moveSmallAmount <= MAX_OFFSET_MAG) {
         currentPageTransform.yOffset += moveSmallAmount;
       }
-      update();
       emit yOffsetChangedByKey();
       return;
     } else if (keySequence == downLargeKey) {
       if (currentPageTransform.yOffset + moveLargeAmount <= MAX_OFFSET_MAG) {
         currentPageTransform.yOffset += moveLargeAmount;
       }
-      update();
       emit yOffsetChangedByKey();
       return;
     } else if (keySequence == upSmallKey) {
       if (currentPageTransform.yOffset - moveSmallAmount >= -MAX_OFFSET_MAG) {
         currentPageTransform.yOffset -= moveSmallAmount;
       }
-      update();
       emit yOffsetChangedByKey();
       return;
     } else if (keySequence == upLargeKey) {
       if (currentPageTransform.yOffset - moveLargeAmount >= -MAX_OFFSET_MAG) {
         currentPageTransform.yOffset -= moveLargeAmount;
       }
-      update();
       emit yOffsetChangedByKey();
       return;
     } else if (keySequence == rightSmallKey) {
       if (currentPageTransform.xOffset + moveSmallAmount <= MAX_OFFSET_MAG) {
         currentPageTransform.xOffset += moveSmallAmount;
       }
-      update();
       emit xOffsetChangedByKey();
       return;
     } else if (keySequence == rightLargeKey) {
       if (currentPageTransform.xOffset + moveLargeAmount <= MAX_OFFSET_MAG) {
         currentPageTransform.xOffset += moveLargeAmount;
       }
-      update();
       emit xOffsetChangedByKey();
       return;
     } else if (keySequence == rotateClockSmallKey) {
@@ -177,7 +167,6 @@ void PageViewer::keyPressEvent(QKeyEvent* event) {
           currentPageTransform.rotationAmount + rotateSmallAmount,
           360.0f
       );
-      update();
       emit rotationChangedByKey();
       return;
     } else if (keySequence == rotateClockLargeKey) {
@@ -185,7 +174,6 @@ void PageViewer::keyPressEvent(QKeyEvent* event) {
           currentPageTransform.rotationAmount + rotateLargeAmount,
           360.0f
       );
-      update();
       emit rotationChangedByKey();
       return;
     } else if (keySequence == rotateAntiClockSmallKey) {
@@ -193,7 +181,6 @@ void PageViewer::keyPressEvent(QKeyEvent* event) {
           currentPageTransform.rotationAmount - rotateSmallAmount,
           360.0f
       );
-      update();
       emit rotationChangedByKey();
       return;
     } else if (keySequence == rotateAntiClockLargeKey) {
@@ -201,7 +188,6 @@ void PageViewer::keyPressEvent(QKeyEvent* event) {
           currentPageTransform.rotationAmount - rotateLargeAmount,
           360.0f
       );
-      update();
       emit rotationChangedByKey();
       return;
     } else if (keySequence == scalePageUpSmallKey) {
@@ -209,7 +195,6 @@ void PageViewer::keyPressEvent(QKeyEvent* event) {
           <= MAX_SCALE) {
         currentPageTransform.scaleAmount += scalePageSmallAmount;
       }
-      update();
       emit scaleChangedByKey();
       return;
     } else if (keySequence == scalePageUpLargeKey) {
@@ -217,7 +202,6 @@ void PageViewer::keyPressEvent(QKeyEvent* event) {
           <= MAX_SCALE) {
         currentPageTransform.scaleAmount += scalePageLargeAmount;
       }
-      update();
       emit scaleChangedByKey();
       return;
     } else if (keySequence == scalePageDownSmallKey) {
@@ -225,7 +209,6 @@ void PageViewer::keyPressEvent(QKeyEvent* event) {
           >= MIN_SCALE) {
         currentPageTransform.scaleAmount -= scalePageSmallAmount;
       }
-      update();
       emit scaleChangedByKey();
       return;
     } else if (keySequence == scalePageDownLargeKey) {
@@ -233,7 +216,6 @@ void PageViewer::keyPressEvent(QKeyEvent* event) {
           >= MIN_SCALE) {
         currentPageTransform.scaleAmount -= scalePageLargeAmount;
       }
-      update();
       emit scaleChangedByKey();
       return;
     }
