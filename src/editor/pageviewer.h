@@ -27,6 +27,7 @@ protected:
 
 private:
   int m_pageCount;
+  QSize m_currentPageSize;
   QPixmap m_currentImage;
   qreal m_ppiX;
   qreal m_ppiY;

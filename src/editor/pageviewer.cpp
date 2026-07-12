@@ -1,5 +1,7 @@
 #include "pageviewer.h"
 
+#include <qnamespace.h>
+
 #include <QGuiApplication>
 #include <QPainter>
 #include <QPainterStateGuard>
@@ -24,7 +26,7 @@ void PageViewer::loadPage() {
   QPdfDocument*& pdfDocument = ProjectSettings::instance().pdfDocument;
   int& currentPageNo = ProjectSettings::instance().currentPageNo;
 
-  QSize currentPageSize = QSize(
+  m_currentPageSize = QSize(
       qRound(
           pdfDocument->pagePointSize(currentPageNo).width() * (m_ppiX / 72.0)
       ),
@@ -32,9 +34,8 @@ void PageViewer::loadPage() {
           pdfDocument->pagePointSize(currentPageNo).height() * (m_ppiY / 72.0)
       )
   );
-
   m_currentImage =
-      QPixmap::fromImage(pdfDocument->render(currentPageNo, currentPageSize));
+      QPixmap::fromImage(pdfDocument->render(currentPageNo, m_currentPageSize));
 }
 
 void PageViewer::keyPressEvent(QKeyEvent* event) {
@@ -247,7 +248,10 @@ void PageViewer::paintEvent(QPaintEvent* event) {
   qreal side = qMin(width(), height());
   qreal painterScale = (side) * (boundBoxScale / viewerPaintDimension);
 
+  QBrush bgBrush(QColor(255, 255, 255));
   QPainter painter(this);
+  painter.setBackgroundMode(Qt::OpaqueMode);
+  painter.setBackground(bgBrush);
   painter.setRenderHint(QPainter::Antialiasing);
   painter.setRenderHint(QPainter::SmoothPixmapTransform);
   painter.translate(centerX, centerY);
@@ -271,6 +275,13 @@ void PageViewer::paintEvent(QPaintEvent* event) {
         currentPageTransform.scaleAmount
     );
     painter.rotate(currentPageTransform.rotationAmount);
+    painter.fillRect(
+        imgStartX,
+        imgStartY,
+        m_currentPageSize.width(),
+        m_currentPageSize.height(),
+        Qt::white
+    );
     painter.drawPixmap(imgStartX, imgStartY, m_currentImage);
   }
 
