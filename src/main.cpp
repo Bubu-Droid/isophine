@@ -1,3 +1,4 @@
+#include <qkeysequence.h>
 #include <sysexits.h>
 
 #include <QApplication>
@@ -10,6 +11,7 @@
 #include "isophine_editor.h"
 #include "project_settings.h"
 
+void refreshSettings(QSettings& settings);
 void validateConfig(QSettings& settings);
 void createConfigIfNeeded(QSettings& settings);
 
@@ -24,6 +26,8 @@ int main(int argc, char* argv[]) {
   validateConfig(settings);
 
   QApplication app(argc, argv);
+
+  refreshSettings(settings);
 
   QStackedWidget rootContainer;
 
@@ -41,10 +45,15 @@ int main(int argc, char* argv[]) {
         editWindow->loadPage();
         dashWindow->statusBar()->clearMessage();
         rootContainer.setCurrentWidget(editWindow);
+        rootContainer.setWindowTitle(
+            QString("%1 — Isophine Editor")
+                .arg(ProjectSettings::instance().projectName)
+        );
       }
   );
   QObject::connect(editWindow, &IsophineEditor::goToHome, [&]() {
     rootContainer.setCurrentWidget(dashWindow);
+    rootContainer.setWindowTitle("Isophine Dashboard");
   });
   QObject::connect(dashWindow, &Dashboard::quitApp, &app, &QApplication::quit);
   QObject::connect(
@@ -53,6 +62,18 @@ int main(int argc, char* argv[]) {
       &app,
       &QApplication::quit
   );
+  QObject::connect(
+      editWindow,
+      &IsophineEditor::updateTitle,
+      [&](const QString& title) { rootContainer.setWindowTitle(title); }
+  );
+
+  QObject::connect(dashWindow, &Dashboard::refreshSettings, [&]() {
+    refreshSettings(settings);
+  });
+  QObject::connect(editWindow, &IsophineEditor::refreshSettings, [&]() {
+    refreshSettings(settings);
+  });
 
   dashWindow->setWindowFlags(Qt::Widget);
   editWindow->setWindowFlags(Qt::Widget);
@@ -61,6 +82,7 @@ int main(int argc, char* argv[]) {
   rootContainer.addWidget(editWindow);
 
   rootContainer.setCurrentWidget(dashWindow);
+  rootContainer.setWindowTitle("Isophine Dashboard");
 
   // TODO: put the default dimensions after trialing
   // rootContainer.resize();
@@ -187,6 +209,154 @@ void createConfigIfNeeded(QSettings& settings) {
           "LargeKey",
           QKeySequence(Qt::ShiftModifier | Qt::Key_E)
       );
+      settings.endGroup();
+    }
+    settings.endGroup();
+  }
+  settings.endGroup();
+}
+
+void refreshSettings(QSettings& settings) {
+  settings.beginGroup("Increments");
+  {
+    settings.beginGroup("Translate");
+    ProjectSettings::instance().moveSmallAmount =
+        settings.value("SmallAmount", 1.0).toDouble();
+    ProjectSettings::instance().moveLargeAmount =
+        settings.value("LargeAmount", 10.0).toDouble();
+    settings.endGroup();
+
+    settings.beginGroup("Rotate");
+    ProjectSettings::instance().rotateSmallAmount =
+        settings.value("SmallAmount", 0.1).toDouble();
+    ProjectSettings::instance().rotateLargeAmount =
+        settings.value("LargeAmount", 1.0).toDouble();
+    settings.endGroup();
+
+    settings.beginGroup("Scale");
+    ProjectSettings::instance().scalePageSmallAmount =
+        settings.value("SmallAmount", 0.01).toDouble();
+    ProjectSettings::instance().scalePageLargeAmount =
+        settings.value("LargeAmount", 0.1).toDouble();
+    settings.endGroup();
+  }
+  settings.endGroup();
+
+  settings.beginGroup("BoundingBox");
+  {
+    ProjectSettings::instance().boundBoxScale =
+        settings.value("Scale", 1.0).toDouble();
+    ProjectSettings::instance().boundBoxLineColor =
+        settings.value("LineColor", QColor(Qt::darkBlue)).value<QColor>();
+    ProjectSettings::instance().boundBoxHorLinesCount =
+        settings.value("HorizontalLinesCount", 5).toInt();
+    ProjectSettings::instance().boundBoxVerLinesCount =
+        settings.value("VerticalLinesCount", 3).toInt();
+  }
+  settings.endGroup();
+
+  settings.beginGroup("Keybindings");
+  {
+    settings.beginGroup("Navigation");
+    ProjectSettings::instance().nextKey =
+        settings.value("NextKey", QKeySequence(Qt::Key_N))
+            .value<QKeySequence>();
+    ProjectSettings::instance().prevKey =
+        settings.value("PrevKey", QKeySequence(Qt::Key_P))
+            .value<QKeySequence>();
+    settings.endGroup();
+
+    settings.beginGroup("ScalePage");
+    {
+      settings.beginGroup("Up");
+      ProjectSettings::instance().scalePageUpSmallKey =
+          settings.value("SmallKey", QKeySequence(Qt::Key_Equal))
+              .value<QKeySequence>();
+      ProjectSettings::instance().scalePageUpLargeKey =
+          settings
+              .value("LargeKey", QKeySequence(Qt::ShiftModifier | Qt::Key_Plus))
+              .value<QKeySequence>();
+      settings.endGroup();
+
+      settings.beginGroup("Down");
+      ProjectSettings::instance().scalePageDownSmallKey =
+          settings.value("SmallKey", QKeySequence(Qt::Key_Minus))
+              .value<QKeySequence>();
+      ProjectSettings::instance().scalePageDownLargeKey =
+          settings
+              .value(
+                  "LargeKey",
+                  QKeySequence(Qt::ShiftModifier | Qt::Key_Underscore)
+              )
+              .value<QKeySequence>();
+      settings.endGroup();
+    }
+    settings.endGroup();
+
+    settings.beginGroup("Movement");
+    {
+      settings.beginGroup("Left");
+      ProjectSettings::instance().leftSmallKey =
+          settings.value("SmallKey", QKeySequence(Qt::Key_H))
+              .value<QKeySequence>();
+      ProjectSettings::instance().leftLargeKey =
+          settings
+              .value("LargeKey", QKeySequence(Qt::ShiftModifier | Qt::Key_H))
+              .value<QKeySequence>();
+      settings.endGroup();
+
+      settings.beginGroup("Down");
+      ProjectSettings::instance().downSmallKey =
+          settings.value("SmallKey", QKeySequence(Qt::Key_J))
+              .value<QKeySequence>();
+      ProjectSettings::instance().downLargeKey =
+          settings
+              .value("LargeKey", QKeySequence(Qt::ShiftModifier | Qt::Key_J))
+              .value<QKeySequence>();
+      settings.endGroup();
+
+      settings.beginGroup("Up");
+      ProjectSettings::instance().upSmallKey =
+          settings.value("SmallKey", QKeySequence(Qt::Key_K))
+              .value<QKeySequence>();
+      ProjectSettings::instance().upLargeKey =
+          settings
+              .value("LargeKey", QKeySequence(Qt::ShiftModifier | Qt::Key_K))
+              .value<QKeySequence>();
+      settings.endGroup();
+
+      settings.beginGroup("Right");
+      ProjectSettings::instance().rightSmallKey =
+          settings.value("SmallKey", QKeySequence(Qt::Key_L))
+              .value<QKeySequence>();
+      ProjectSettings::instance().rightLargeKey =
+          settings
+              .value("LargeKey", QKeySequence(Qt::ShiftModifier | Qt::Key_L))
+              .value<QKeySequence>();
+      settings.endGroup();
+    }
+    settings.endGroup();
+
+    settings.beginGroup("Rotate");
+    {
+      settings.beginGroup("Clockwise");
+      ProjectSettings::instance().rotateClockSmallKey =
+          settings.value("SmallKey", QKeySequence(Qt::Key_R))
+              .value<QKeySequence>();
+      ProjectSettings::instance().rotateClockLargeKey =
+          settings
+              .value("LargeKey", QKeySequence(Qt::ShiftModifier | Qt::Key_R))
+              .value<QKeySequence>();
+      settings.endGroup();
+
+      settings.beginGroup("AntiClockwise");
+      ProjectSettings::instance().rotateAntiClockSmallKey =
+          settings.value("SmallKey", QKeySequence(Qt::Key_E))
+              .value<QKeySequence>();
+      ProjectSettings::instance().rotateAntiClockLargeKey =
+          settings
+              .value("LargeKey", QKeySequence(Qt::ShiftModifier | Qt::Key_E))
+              .value<QKeySequence>();
       settings.endGroup();
     }
     settings.endGroup();
