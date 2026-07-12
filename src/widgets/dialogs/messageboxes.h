@@ -90,3 +90,11 @@ public:
   PDFMissing() = delete;
   explicit PDFMissing(QWidget* parent = nullptr);
 };
+
+class SaveUnsavedChanges: public QMessageBox {
+  Q_OBJECT
+
+public:
+  SaveUnsavedChanges() = delete;
+  explicit SaveUnsavedChanges(QWidget* parent = nullptr);
+};

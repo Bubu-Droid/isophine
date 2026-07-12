@@ -127,3 +127,13 @@ PDFMissing::PDFMissing(QWidget* parent) : QMessageBox(parent) {
   ));
   this->setIcon(QMessageBox::Critical);
 }
+
+SaveUnsavedChanges::SaveUnsavedChanges(QWidget* parent) : QMessageBox(parent) {
+  this->setDefaultButton(QMessageBox::Save);
+  this->setWindowTitle(tr("Save Unsaved Changes"));
+  this->setText(tr("Do you want to save your changes?"));
+  this->setIcon(QMessageBox::Information);
+  this->setStandardButtons(
+      QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel
+  );
+}
