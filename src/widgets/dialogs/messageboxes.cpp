@@ -137,3 +137,10 @@ SaveUnsavedChanges::SaveUnsavedChanges(QWidget* parent) : QMessageBox(parent) {
       QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel
   );
 }
+
+ThumbSaveFailed::ThumbSaveFailed(QWidget* parent) : QMessageBox(parent) {
+  this->setDefaultButton(QMessageBox::NoButton);
+  this->setWindowTitle(tr("Failed to save thumbnail"));
+  this->setText(tr("Failed to save thumbnail due to unknown reason."));
+  this->setIcon(QMessageBox::Warning);
+}

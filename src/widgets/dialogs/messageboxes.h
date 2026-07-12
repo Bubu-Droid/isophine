@@ -98,3 +98,11 @@ public:
   SaveUnsavedChanges() = delete;
   explicit SaveUnsavedChanges(QWidget* parent = nullptr);
 };
+
+class ThumbSaveFailed: public QMessageBox {
+  Q_OBJECT
+
+public:
+  ThumbSaveFailed() = delete;
+  explicit ThumbSaveFailed(QWidget* parent = nullptr);
+};
