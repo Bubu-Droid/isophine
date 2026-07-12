@@ -25,10 +25,6 @@ ProjSettingsDialog::ProjSettingsDialog(
   );
   ui->selectOutDirButton->setText(QFileInfo(m_projDat.projOutDir).fileName());
 
-  if (m_projDat.isExisting) {
-    ui->selectOutPdfHeightSpinBox->setEnabled(false);
-    ui->selectOutPdfWidthSpinBox->setEnabled(false);
-  }
   ui->selectOutPdfHeightSpinBox->setValue(m_projDat.boundBoxHeight);
   ui->selectOutPdfWidthSpinBox->setValue(m_projDat.boundBoxWidth);
 }
@@ -76,7 +72,6 @@ ProjectData ProjSettingsDialog::getProjectData() const {
   projDat.projOutDir = m_outDir;
   projDat.boundBoxHeight = ui->selectOutPdfHeightSpinBox->value();
   projDat.boundBoxWidth = ui->selectOutPdfWidthSpinBox->value();
-  projDat.isExisting = projDat.isExisting;
 
   return projDat;
 }

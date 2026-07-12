@@ -47,7 +47,6 @@ ProjectData OpenProjectDialog::getProjectData() const {
   projDat.pdfPath = m_pdfPath;
   projDat.layoutPath = m_layoutPath;
   projDat.projOutDir = m_outDir;
-  projDat.isExisting = true;
 
   return projDat;
 }
