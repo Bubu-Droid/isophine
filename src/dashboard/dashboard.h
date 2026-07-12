@@ -41,6 +41,8 @@ private slots:
 signals:
   void openProjectToRoot(const ProjectData& projDat);
   void quitApp();
+  void updateTitle(const QString& title);
+  void refreshSettings();
 
 private:
   Ui::Dashboard* ui;

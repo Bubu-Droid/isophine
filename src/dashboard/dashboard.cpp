@@ -171,19 +171,18 @@ void Dashboard::saveProject(const ProjectData& projDat) {
 
 void Dashboard::openProject(const ProjectData& projDat) {
   QPdfDocument*& pdfDocument = ProjectSettings::instance().pdfDocument;
-
   m_layoutFile.setFileName(projDat.layoutPath);
 
   if (!validateProjectLayout(projDat)) {
     return;
   }
 
-  if (!m_projectsListFile.open(QIODeviceBase::ReadOnly)) {
-    return;
-  }
-  QJsonObject fileJsonObj =
-      QJsonDocument::fromJson(m_projectsListFile.readAll()).object();
-  m_projectsListFile.close();
+  // if (!m_projectsListFile.open(QIODeviceBase::ReadOnly)) {
+  //   return;
+  // }
+  // QJsonObject fileJsonObj =
+  //     QJsonDocument::fromJson(m_projectsListFile.readAll()).object();
+  // m_projectsListFile.close();
 
   if (!m_layoutFile.open(QIODeviceBase::ReadOnly)) {
     return;
@@ -192,17 +191,19 @@ void Dashboard::openProject(const ProjectData& projDat) {
       QJsonDocument::fromJson(m_layoutFile.readAll()).object();
   m_layoutFile.close();
 
-  QString projKey;
-  for (auto it = fileJsonObj.constBegin(); it != fileJsonObj.constEnd(); ++it) {
-    if (it.value().toObject()["project_name"] == projDat.projectName) {
-      projKey = it.key();
-      break;
-    }
-  }
-  layoutJsonObj["bound_box_height"] =
-      fileJsonObj[projKey].toObject()["bound_box_height"].toDouble();
-  layoutJsonObj["bound_box_width"] =
-      fileJsonObj[projKey].toObject()["bound_box_width"].toDouble();
+  // QString projKey;
+  // for (auto it = fileJsonObj.constBegin(); it != fileJsonObj.constEnd(); ++it) {
+  //   if (it.value().toObject()["project_name"] == projDat.projectName) {
+  //     projKey = it.key();
+  //     break;
+  //   }
+  // }
+  // layoutJsonObj["bound_box_height"] =
+  //     fileJsonObj[projKey].toObject()["bound_box_height"].toDouble();
+  // layoutJsonObj["bound_box_width"] =
+  //     fileJsonObj[projKey].toObject()["bound_box_width"].toDouble();
+  layoutJsonObj["bound_box_height"] = projDat.boundBoxHeight;
+  layoutJsonObj["bound_box_width"] = projDat.boundBoxWidth;
 
   if (!m_layoutFile.open(QIODeviceBase::WriteOnly | QIODeviceBase::Truncate)) {
     return;
@@ -215,13 +216,11 @@ void Dashboard::openProject(const ProjectData& projDat) {
   }
   layoutJsonObj = QJsonDocument::fromJson(m_layoutFile.readAll()).object();
   m_layoutFile.close();
+  QJsonArray layoutJsonArr = layoutJsonObj["transform_array"].toArray();
 
+  ProjectSettings::instance().isSaved = true;
   ProjectSettings::instance().currentPageNo =
       layoutJsonObj["current_page_no"].toInt();
-  ProjectSettings::instance().boundBoxHeight =
-      layoutJsonObj["bound_box_height"].toDouble();
-  ProjectSettings::instance().boundBoxWidth =
-      layoutJsonObj["bound_box_width"].toDouble();
   ProjectSettings::instance().projectName = projDat.projectName;
   ProjectSettings::instance().layoutPath = projDat.layoutPath;
   ProjectSettings::instance().projectOutDir = projDat.projOutDir;
@@ -232,6 +231,19 @@ void Dashboard::openProject(const ProjectData& projDat) {
   ProjectSettings::instance().pageTransformVector.resize(
       pdfDocument->pageCount()
   );
+  std::vector<PageTransform>& pageTransformVector =
+      ProjectSettings::instance().pageTransformVector;
+  for (int i = 0; i != layoutJsonObj["transform_array"].toArray().count();
+       ++i) {
+    pageTransformVector[i].xOffset =
+        layoutJsonArr[i].toObject()["x_offset"].toDouble();
+    pageTransformVector[i].yOffset =
+        layoutJsonArr[i].toObject()["y_offset"].toDouble();
+    pageTransformVector[i].rotationAmount =
+        layoutJsonArr[i].toObject()["rotation_amount"].toDouble();
+    pageTransformVector[i].scaleAmount =
+        layoutJsonArr[i].toObject()["scale_amount"].toDouble();
+  }
 
   emit openProjectToRoot(projDat);
 }
@@ -377,12 +389,6 @@ bool Dashboard::validateProjectLayout(const ProjectData& projDat) {
     return false;
   }
 
-  // if (!m_layoutFile.open(QIODeviceBase::ReadOnly)) {
-  //   return false;
-  // }
-  // layoutJsonObj = QJsonDocument::fromJson(m_layoutFile.readAll()).object();
-  // m_layoutFile.close();
-
   ui->statusbar->showMessage(tr("Loading PDF..."));
   ui->statusbar->repaint();
 
@@ -516,7 +522,7 @@ void Dashboard::validateDB() {
 
     QJsonObject fileJsonChildObj = it.value().toObject();
 
-    if (fileJsonChildObj.count() != 7
+    if (fileJsonChildObj.count() != 6
         || !fileJsonChildObj.contains("project_name")
         || !fileJsonChildObj.contains("pdf_path")
         || !fileJsonChildObj.contains("layout_path")
@@ -545,5 +551,6 @@ void Dashboard::on_actionEdit_App_Settings_triggered() {
   AppSettingsDialog dialog = AppSettingsDialog(this);
   if (dialog.exec() == QDialog::Accepted) {
     dialog.updateSettings();
+    emit refreshSettings();
   }
 }
