@@ -31,14 +31,16 @@ void IsophineEditor::on_actionQuit_triggered() {
   emit quitApp();
 }
 
+void IsophineEditor::on_actionHome_triggered() {
+  emit goToHome();
+}
+
 void IsophineEditor::on_actionToggleInspector_triggered(bool checked) {
   ui->inspectorPanelDockWidget->setVisible(checked);
 }
 
 void IsophineEditor::on_actionToggleThumbnail_triggered(bool checked) {
   ui->thumbnailViewDockWidget->setVisible(checked);
-  // TODO: add dialog messages on failures here later on
-  // add a signal and show a message to the statusbar
 }
 
 void IsophineEditor::on_thumbnailView_activated(const QModelIndex& index) {
