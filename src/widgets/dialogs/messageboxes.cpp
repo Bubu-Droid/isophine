@@ -144,3 +144,23 @@ ThumbSaveFailed::ThumbSaveFailed(QWidget* parent) : QMessageBox(parent) {
   this->setText(tr("Failed to save thumbnail due to unknown reason."));
   this->setIcon(QMessageBox::Warning);
 }
+
+ProjectRenderSuccess::ProjectRenderSuccess(QWidget* parent) :
+    QMessageBox(parent) {
+  this->setDefaultButton(QMessageBox::NoButton);
+  this->setWindowTitle(tr("Project Render Sucessful"));
+  this->setText(tr(
+      "Output PDF has been successfully rendered, check the project output directory for the result."
+  ));
+  this->setIcon(QMessageBox::Information);
+}
+
+ProjectRenderFailed::ProjectRenderFailed(QWidget* parent) :
+    QMessageBox(parent) {
+  this->setDefaultButton(QMessageBox::NoButton);
+  this->setWindowTitle(tr("Project Render Failed"));
+  this->setText(tr(
+      "Project render failed! Please check the log.txt file in the project output directory for more details."
+  ));
+  this->setIcon(QMessageBox::Critical);
+}

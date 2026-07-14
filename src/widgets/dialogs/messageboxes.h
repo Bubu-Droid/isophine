@@ -106,3 +106,19 @@ public:
   ThumbSaveFailed() = delete;
   explicit ThumbSaveFailed(QWidget* parent = nullptr);
 };
+
+class ProjectRenderSuccess: public QMessageBox {
+  Q_OBJECT
+
+public:
+  ProjectRenderSuccess() = delete;
+  explicit ProjectRenderSuccess(QWidget* parent = nullptr);
+};
+
+class ProjectRenderFailed: public QMessageBox {
+  Q_OBJECT
+
+public:
+  ProjectRenderFailed() = delete;
+  explicit ProjectRenderFailed(QWidget* parent = nullptr);
+};
