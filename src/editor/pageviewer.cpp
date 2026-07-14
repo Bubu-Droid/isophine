@@ -1,7 +1,5 @@
 #include "pageviewer.h"
 
-#include <qnamespace.h>
-
 #include <QGuiApplication>
 #include <QPainter>
 #include <QPainterStateGuard>
@@ -226,8 +224,10 @@ void PageViewer::keyPressEvent(QKeyEvent* event) {
 }
 
 void PageViewer::paintEvent(QPaintEvent* event) {
-  qreal& boundBoxHeight = ProjectSettings::instance().boundBoxHeight;
-  qreal& boundBoxWidth = ProjectSettings::instance().boundBoxWidth;
+  qreal boundBoxHeight =
+      ProjectSettings::instance().boundBoxHeight * (m_ppiX / 72.0);
+  qreal boundBoxWidth =
+      ProjectSettings::instance().boundBoxWidth * (m_ppiY / 72.0);
   qreal boundBoxHalfWidth = boundBoxWidth / 2.0;
   qreal boundBoxHalfHeight = boundBoxHeight / 2.0;
   qreal& boundBoxScale = ProjectSettings::instance().boundBoxScale;
@@ -317,6 +317,11 @@ void PageViewer::paintEvent(QPaintEvent* event) {
   qreal boundBoxHorLinesGap = boundBoxHeight / (boundBoxHorLinesCount + 1);
   qreal boundBoxVerLinesGap = boundBoxWidth / (boundBoxVerLinesCount + 1);
 
+  // HACK: trying to avoid anti-aliasing here
+  // fuck, doesn't work, have to convert ALL of the coodinates to integers
+  // fuck this, i'm severely burnt out, can't work on this project anymore
+  // I'm done with this, will revisit and refactor (tbf, rewrite) the entire
+  // project during winter vacation
   for (int i = 0; i < boundBoxHorLinesCount; ++i) {
     QPoint leftDrawPoint =
         boundBoxTopLeftCorner - QPoint(0, boundBoxHorLinesGap * (i + 1));
