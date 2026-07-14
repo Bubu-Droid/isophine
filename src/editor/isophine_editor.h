@@ -49,6 +49,7 @@ private slots:
   void on_actionHome_triggered();
   void on_actionSave_triggered();
   void on_actionEditGlobalSettings_triggered();
+  void on_actionExport_triggered();
 
 signals:
   void quitApp();

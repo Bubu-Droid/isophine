@@ -5,9 +5,11 @@
 #include <QJsonObject>
 
 #include "appsettingsdialog.h"
+#include "buttondialogs.h"
 #include "messageboxes.h"
 #include "pageviewer.h"
 #include "project_settings.h"
+#include "renderer.h"
 #include "ui_isophine_editor.h"
 
 IsophineEditor::IsophineEditor(QWidget* parent) :
@@ -253,4 +255,37 @@ void IsophineEditor::on_pageViewWidget_pageTransformChanged() {
   on_pageViewWidget_scaleChangedByKey();
   on_pageViewWidget_rotationChangedByKey();
   update();
+}
+
+void IsophineEditor::on_actionExport_triggered() {
+  SelectPageBgColor dialog = SelectPageBgColor(this);
+  if (dialog.exec() == QDialog::Accepted) {
+    std::string result = PDFRenderer(
+        ProjectSettings::instance().pdfPath,
+        ProjectSettings::instance().pdfOutPath,
+        ProjectSettings::instance().pageTransformVector,
+        dialog.selectedColor(),
+        QSizeF(
+            ProjectSettings::instance().boundBoxWidth,
+            ProjectSettings::instance().boundBoxHeight
+        )
+    );
+
+    if (result.empty()) {
+      ProjectRenderSuccess msgBox = ProjectRenderSuccess(this);
+      msgBox.exec();
+    } else {
+      QFile logFile = QFile(
+          QDir(ProjectSettings::instance().projectOutDir).filePath("log.txt")
+      );
+
+      if (!logFile.open(QIODeviceBase::WriteOnly | QIODeviceBase::Truncate)) {
+        return;
+      }
+      logFile.write(QString::fromStdString(result).toUtf8());
+      logFile.close();
+      ProjectRenderFailed msgBox = ProjectRenderFailed(this);
+      msgBox.exec();
+    }
+  }
 }
