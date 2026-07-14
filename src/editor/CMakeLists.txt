@@ -13,3 +13,5 @@ target_sources(isophine
 target_include_directories(isophine
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
 )
+
+target_link_libraries(isophine PRIVATE qpdf::libqpdf)
