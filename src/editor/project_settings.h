@@ -32,6 +32,8 @@ public:
   }
 
   QPdfDocument* pdfDocument = nullptr;
+  QString pdfPath;
+  QString pdfOutPath;
   QString projectOutDir;
   QString layoutPath;
   QString projectName;

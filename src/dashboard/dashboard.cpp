@@ -207,6 +207,10 @@ void Dashboard::openProject(const ProjectData& projDat) {
   ProjectSettings::instance().projectName = projDat.projectName;
   ProjectSettings::instance().layoutPath = projDat.layoutPath;
   ProjectSettings::instance().projectOutDir = projDat.projOutDir;
+  ProjectSettings::instance().pdfPath = projDat.pdfPath;
+  ProjectSettings::instance().pdfOutPath =
+      QDir(projDat.projOutDir)
+          .filePath(QString("%1_output.pdf").arg(projDat.projectName));
   ProjectSettings::instance().boundBoxHeight = projDat.boundBoxHeight
       * (QGuiApplication::primaryScreen()->physicalDotsPerInchX() / 72.0);
   ProjectSettings::instance().boundBoxWidth = projDat.boundBoxWidth
