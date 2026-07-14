@@ -1,4 +1,3 @@
-#include <qkeysequence.h>
 #include <sysexits.h>
 
 #include <QApplication>
