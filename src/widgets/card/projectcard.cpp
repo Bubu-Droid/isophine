@@ -4,6 +4,7 @@
 #include <QHBoxLayout>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QPainter>
 #include <QSizePolicy>
 #include <QSpacerItem>
 #include <QVBoxLayout>
@@ -63,10 +64,19 @@ ProjectCard::ProjectCard(QWidget* parent, const ProjectData& projDat) :
 
   QPixmap imagePixmap;
 
+  // TODO: make a proper bg and link it here
   if (QFile(QDir(m_projDat.projOutDir).filePath("thumbnail.png")).exists()) {
     imagePixmap = QPixmap(QDir(m_projDat.projOutDir).filePath("thumbnail.png"));
   } else {
-    imagePixmap = QPixmap("/home/bubu/latex-works/latex-showcase/media/1.png");
+    QPixmap a4Thumb(210, 297);
+    a4Thumb.fill(Qt::white);
+
+    QPainter painter(&a4Thumb);
+    painter.end();
+
+    imagePixmap =
+        a4Thumb.scaled(100, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    // imagePixmap = QPixmap("/home/bubu/latex-works/latex-showcase/media/1.png");
   }
 
   QPixmap scaledPixmap =
