@@ -1,7 +1,5 @@
 #include "buttondialogs.h"
 
-#include <qnamespace.h>
-
 SelectPDFDialog::SelectPDFDialog(QWidget* parent, QString setDirPath) :
     QFileDialog(parent) {
   this->setWindowTitle("Select Target PDF");
@@ -38,4 +36,8 @@ SelectLayoutFileDialog::SelectLayoutFileDialog(
 SelectGridlineColor::SelectGridlineColor(QWidget* parent) :
     QColorDialog(parent) {
   this->setWindowTitle("Select Gridline Color");
+}
+
+SelectPageBgColor::SelectPageBgColor(QWidget* parent) : QColorDialog(parent) {
+  this->setWindowTitle("Select Page Background Color");
 }

@@ -47,3 +47,11 @@ public:
   SelectGridlineColor() = delete;
   explicit SelectGridlineColor(QWidget* parent = nullptr);
 };
+
+class SelectPageBgColor: public QColorDialog {
+  Q_OBJECT
+
+public:
+  SelectPageBgColor() = delete;
+  explicit SelectPageBgColor(QWidget* parent = nullptr);
+};
