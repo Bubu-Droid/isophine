@@ -6,6 +6,8 @@ target_sources(isophine
     pageviewer.cpp
     pageviewer.h
     project_settings.h
+    renderer.cpp
+    renderer.h
 )
 
 target_include_directories(isophine
