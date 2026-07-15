@@ -101,9 +101,9 @@ void createConfigIfNeeded(QSettings& settings) {
     return;
   }
 
-  settings.beginGroup("Canvas");
-  { settings.setValue("ZoomAmount", 0.25); }
-  settings.endGroup();
+  // settings.beginGroup("Canvas");
+  // { settings.setValue("ZoomAmount", 0.25); }
+  // settings.endGroup();
 
   settings.beginGroup("Increments");
   {
@@ -127,8 +127,8 @@ void createConfigIfNeeded(QSettings& settings) {
   settings.beginGroup("BoundingBox");
   {
     settings.setValue("Scale", 1.0);
-    settings.setValue("Height", 1122.67);
-    settings.setValue("Width", 793.33);
+    // settings.setValue("Height", 1122.67);
+    // settings.setValue("Width", 793.33);
     settings.setValue("LineColor", QColor(Qt::darkBlue));
     settings.setValue("HorizontalLinesCount", 5);
     settings.setValue("VerticalLinesCount", 3);
@@ -392,16 +392,16 @@ void validateConfig(QSettings& settings) {
     std::exit(EX_CONFIG);
   }
 
-  if (!settings.contains("Canvas/ZoomAmount")
-      || !settings.contains("Increments/Translate/SmallAmount")
+  if ( // !settings.contains("Canvas/ZoomAmount") ||
+      !settings.contains("Increments/Translate/SmallAmount")
       || !settings.contains("Increments/Translate/LargeAmount")
       || !settings.contains("Increments/Rotate/SmallAmount")
       || !settings.contains("Increments/Rotate/LargeAmount")
       || !settings.contains("Increments/Scale/SmallAmount")
       || !settings.contains("Increments/Scale/LargeAmount")
       || !settings.contains("BoundingBox/Scale")
-      || !settings.contains("BoundingBox/Height")
-      || !settings.contains("BoundingBox/Width")
+      // || !settings.contains("BoundingBox/Height")
+      // || !settings.contains("BoundingBox/Width")
       || !settings.contains("BoundingBox/LineColor")
       || !settings.contains("BoundingBox/HorizontalLinesCount")
       || !settings.contains("BoundingBox/VerticalLinesCount")
@@ -422,7 +422,8 @@ void validateConfig(QSettings& settings) {
       || !settings.contains("Keybindings/Rotate/Clockwise/SmallKey")
       || !settings.contains("Keybindings/Rotate/Clockwise/LargeKey")
       || !settings.contains("Keybindings/Rotate/AntiClockwise/SmallKey")
-      || !settings.contains("Keybindings/Rotate/AntiClockwise/LargeKey")) {
+      || !settings.contains("Keybindings/Rotate/AntiClockwise/LargeKey")
+  ) {
     qDebug().noquote()
         << QString(
                "The configuration has missing definition(s), you may want to reset the configuration to fix this issue."
