@@ -266,8 +266,12 @@ void IsophineEditor::on_actionExport_triggered() {
         ProjectSettings::instance().pageTransformVector,
         dialog.selectedColor(),
         QSizeF(
-            ProjectSettings::instance().boundBoxWidth,
+            ProjectSettings::instance().boundBoxWidth
+                * (72.0
+                   / QGuiApplication::primaryScreen()->physicalDotsPerInchX()),
             ProjectSettings::instance().boundBoxHeight
+                * (72.0
+                   / QGuiApplication::primaryScreen()->physicalDotsPerInchY())
         )
     );
 

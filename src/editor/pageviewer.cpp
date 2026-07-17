@@ -224,10 +224,8 @@ void PageViewer::keyPressEvent(QKeyEvent* event) {
 }
 
 void PageViewer::paintEvent(QPaintEvent* event) {
-  qreal boundBoxHeight =
-      ProjectSettings::instance().boundBoxHeight * (m_ppiX / 72.0);
-  qreal boundBoxWidth =
-      ProjectSettings::instance().boundBoxWidth * (m_ppiY / 72.0);
+  qreal& boundBoxHeight = ProjectSettings::instance().boundBoxHeight;
+  qreal& boundBoxWidth = ProjectSettings::instance().boundBoxWidth;
   qreal boundBoxHalfWidth = boundBoxWidth / 2.0;
   qreal boundBoxHalfHeight = boundBoxHeight / 2.0;
   qreal& boundBoxScale = ProjectSettings::instance().boundBoxScale;

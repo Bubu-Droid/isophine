@@ -70,6 +70,10 @@ std::string PDFRenderer(
       double s = pageTransformVector[i].scaleAmount;
       double cosT = std::cos(theta);
       double sinT = std::sin(theta);
+      double sx =
+          (72.0 / QGuiApplication::primaryScreen()->physicalDotsPerInchX());
+      double sy =
+          (72.0 / QGuiApplication::primaryScreen()->physicalDotsPerInchY());
 
       double a = s * cosT;
       double b = s * sinT;
@@ -79,13 +83,9 @@ std::string PDFRenderer(
       double cx = page_w / 2.0;
       double cy = page_h / 2.0;
 
-      double e = pageTransformVector[i].xOffset
-              * (72.0
-                 / QGuiApplication::primaryScreen()->physicalDotsPerInchX())
+      double e = pageTransformVector[i].xOffset * sx
           + pageDimensions.width() / 2.0 - (a * cx + c * cy);
-      double f = -pageTransformVector[i].yOffset
-              * (72.0
-                 / QGuiApplication::primaryScreen()->physicalDotsPerInchX())
+      double f = -pageTransformVector[i].yOffset * sy
           + pageDimensions.height() / 2.0 - (b * cx + d * cy);
 
       QPDFObjectHandle newPage = QPDFObjectHandle::parse(
