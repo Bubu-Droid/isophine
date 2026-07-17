@@ -126,7 +126,7 @@ void createConfigIfNeeded(QSettings& settings) {
 
   settings.beginGroup("BoundingBox");
   {
-    settings.setValue("Scale", 0.75);
+    settings.setValue("Scale", 1.0); // 0.75
     // settings.setValue("Height", 1122.67);
     // settings.setValue("Width", 793.33);
     settings.setValue("LineColor", QColor(Qt::darkBlue));
@@ -250,7 +250,7 @@ void refreshSettings(QSettings& settings) {
   settings.beginGroup("BoundingBox");
   {
     ProjectSettings::instance().boundBoxScale =
-        settings.value("Scale", 0.75).toDouble();
+        settings.value("Scale", 1.0).toDouble(); // 0.75
     ProjectSettings::instance().boundBoxLineColor =
         settings.value("LineColor", QColor(Qt::darkBlue)).value<QColor>();
     ProjectSettings::instance().boundBoxHorLinesCount =
