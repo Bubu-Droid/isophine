@@ -7,6 +7,8 @@ If you're interested in this project, please read the
 
 ## Preview
 
+https://github.com/user-attachments/assets/013e7d7d-73a9-48f7-928c-cdab104b122f
+
 ## Compilation
 
 This project requires Qt6 and QPDF as dependencies for compilation.
