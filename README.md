@@ -63,7 +63,7 @@ The default keybindings are inspired by vim motion keybindings.
 | `Ctrl+O` | Open existing project from dashboard           |
 | `Ctrl+,` | Open app settings                              |
 
-### Default Values for Other Settings Variables
+### Default Values for Other Settings Parameters
 
 | Key                                    | Value     |
 | -------------------------------------- | --------- |
