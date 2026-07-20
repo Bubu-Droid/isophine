@@ -1,6 +1,6 @@
 # Isophine
 
-A blazing fast PDF imposition GUI tool written in C++ with Qt and QPDF.
+A blazing fast PDF imposition GUI tool written in C++ using Qt and QPDF.
 
 If you're interested in this project, please read the
 [contribution](#contribution) section of this README.
