@@ -1,6 +1,12 @@
 # Isophine
 
 A blazing fast PDF imposition GUI tool written in C++ using Qt and QPDF.
+It allows scaling, rotating, translating, and clipping pages based on
+a predetermined dimension chosen by the user.
+The rendered pages are created by making a deep copy of
+XObject forms from the original PDF and then stamping them onto
+a new empty PDF document.
+This preserves utilities like text selection, searching for text, etc.
 
 If you're interested in this project, please read the
 [contribution](#contribution) section of this README.
