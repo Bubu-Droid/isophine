@@ -12,3 +12,9 @@ find_package(qpdf REQUIRED)
 qt_standard_project_setup()
 
 add_subdirectory(src)
+
+install(TARGETS isophine
+    BUNDLE  DESTINATION .
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
