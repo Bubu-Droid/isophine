@@ -1,11 +1,12 @@
 // TODO: Learn PDF fundamentals from https://opensource.adobe.com/dc-acrobat-sdk-docs/pdfstandards/pdfreference1.7old.pdf
-// If you're here because I yapped about this project of mine, I don't yet understand PDF fundamentals very clearly yet.
-// So basically, I threw a bit of stuff to get attention. :3
-// I've plans on reading the pdfreference1.7, strip this library out of this project, and write a dedicated library
-// with python bindings for this renderer.
+// If you're here because I yapped about this project of mine,
+// I don't yet understand PDF fundamentals very clearly yet.
+// I've plans on reading the pdfreference1.7, strip this library
+// out of this project, and write a dedicated library with python
+// bindings for this renderer.
 // This is the only scope in the entire project where I had to heavily rely on AI.
 // Every other line of code was written manually by me.
-// I don't know shit about PDF fundamentals -- I tried reading the document above but was overwhelmed by its volume.
+// I tried reading the document above but was overwhelmed by its volume.
 // The same goes for QPDF's docs.
 // NOTE: I'll be working on this script during the next inter-semestral break, so, I'd hopefully be able to learn
 // more about PDF internals and QPDF by then.
