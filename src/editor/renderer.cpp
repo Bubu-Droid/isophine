@@ -7,9 +7,9 @@
 // Every other line of code was written manually by me.
 // I don't know shit about PDF fundamentals -- I tried reading the document above but was overwhelmed by its volume.
 // The same goes for QPDF's docs.
-// NOTE: If you know how QPDF / PDF internals work and see something off in this file, please let me know.
-// I'll be working on this script during the next inter-semestral break, so, I'd hopefully be able to learn
+// NOTE: I'll be working on this script during the next inter-semestral break, so, I'd hopefully be able to learn
 // more about PDF internals and QPDF by then.
+// If you know how QPDF / PDF internals work and see something off in this file, please let me know.
 
 #include "renderer.h"
 
